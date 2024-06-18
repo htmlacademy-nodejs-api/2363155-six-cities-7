@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import path, { dirname } from 'node:path';
+import path from 'node:path';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import { TSVFileReader, TSVOfferGenerator } from '../shared/index.js';
 import axios from 'axios';
 import { TSVFileWriter } from '../shared/file-writer/index.js';
+import { getCurrentModuleDirectoryPath } from '../utils/index.js';
 
-const filePath = dirname(fileURLToPath(import.meta.url));
+const filePath = getCurrentModuleDirectoryPath();
 const packageUrl = path.resolve(filePath, '../../package.json');
 const packageJsonContent = JSON.parse(await readFile(packageUrl, 'utf-8'));
 

@@ -14,21 +14,32 @@
     "lint": "eslint src/ --ext .ts",
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
-     "ts": "tsc --noEmit && node --no-warnings=ExperimentalWarning --loader ts-node/esm"
+    "ts": "tsc --noEmit && node --no-warnings=--no-warnings=ExperimentalWarning --loader ts-node/esm",
+    "mock-server": "npx json-server ./mocks/mock-server-data.json --port=3377",
+    "cli": "npm run ts ./src/cli/node-tsv-parser.ts"
   },
   "devDependencies": {
     "@types/node": "20.12.7",
     "@typescript-eslint/eslint-plugin": "6.7.0",
     "@typescript-eslint/parser": "6.7.0",
-    "eslint": "8.49.0",
+    "eslint": "^8.56.0",
     "eslint-config-htmlacademy": "9.1.1",
+    "eslint-plugin-unicorn": "^52.0.0",
+    "json-server": "^1.0.0-alpha.23",
+    "prettier-eslint": "^16.3.0",
     "rimraf": "5.0.1",
-    "ts-node": "10.9.2",
+    "ts-node": "^10.9.2",
     "typescript": "5.4.5"
   },
   "type": "module",
   "engines": {
     "node": "^20.0.0",
     "npm": ">=10"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "dayjs": "^1.11.11"
   }
 }

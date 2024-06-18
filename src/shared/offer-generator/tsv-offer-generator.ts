@@ -9,23 +9,35 @@ import {
   getRandomFloatInRange,
 } from '../../utils/index.js';
 
-const MIN_PRICE = 100;
-const MAX_PRICE = 100000;
+const Price = {
+  MIN: 100,
+  MAX: 100000,
+};
 
-const MIN_RATE = 1;
-const MAX_RATE = 5;
+const Rate = {
+  MIN: 1,
+  MAX: 5,
+};
 
-const MIN_ROOMS = 1;
-const MAX_ROOMS = 8;
+const Rooms = {
+  MIN: 1,
+  MAX: 8,
+};
 
-const MIN_GUESTS = 1;
-const MAX_GUESTS = 10;
+const Guests = {
+  MIN: 1,
+  MAX: 10,
+};
 
-const MIN_LATITUDE = -90;
-const MAX_LATITUDE = 90;
+const Latitude = {
+  MIN: -90,
+  MAX: 90,
+};
 
-const MIN_LONGITUDE = -180;
-const MAX_LONGITUDE = 180;
+const Longitude = {
+  MIN: -180,
+  MAX: 180,
+};
 
 const COORDINATES_FRACTION_DIGITS = 6;
 
@@ -49,7 +61,7 @@ class TSVOfferGenerator implements OfferGenerator {
     );
     const city = getRandomArrayItem(this.mockData.cities);
     const housing = getRandomArrayItem(this.mockData.housingTypes);
-    const price = getRandomNumberInRange(MIN_PRICE, MAX_PRICE).toString();
+    const price = getRandomNumberInRange(Price.MIN, Price.MAX).toString();
     const date = getRandomDate().toISOString();
     const authorName = getRandomArrayItem<string>(this.mockData.names);
     const password = getRandomArrayItem(this.mockData.passwords);
@@ -58,17 +70,17 @@ class TSVOfferGenerator implements OfferGenerator {
     const previewUrl = getRandomArrayItem(this.mockData.previews);
     const premium = getRandomBoolean();
     const favorite = getRandomBoolean();
-    const rating = getRandomNumberInRange(MIN_RATE, MAX_RATE);
-    const rooms = getRandomNumberInRange(MIN_ROOMS, MAX_ROOMS);
-    const guests = getRandomNumberInRange(MIN_GUESTS, MAX_GUESTS);
+    const rating = getRandomNumberInRange(Rate.MIN, Rate.MAX);
+    const rooms = getRandomNumberInRange(Rooms.MIN, Rooms.MAX);
+    const guests = getRandomNumberInRange(Guests.MIN, Guests.MAX);
     const latitude = getRandomFloatInRange(
-      MIN_LATITUDE,
-      MAX_LATITUDE,
+      Latitude.MIN,
+      Latitude.MAX,
       COORDINATES_FRACTION_DIGITS,
     ).toString();
     const longitude = getRandomFloatInRange(
-      MIN_LONGITUDE,
-      MAX_LONGITUDE,
+      Longitude.MIN,
+      Longitude.MAX,
       COORDINATES_FRACTION_DIGITS,
     ).toString();
     const userType = getRandomArrayItem(USER_TYPES);

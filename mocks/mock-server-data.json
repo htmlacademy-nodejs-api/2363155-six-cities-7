@@ -1,0 +1,117 @@
+{
+  "api": {
+    "offerNames": [
+      "Parisian Dream",
+      "Amsterdam Getaway",
+      "Cologne Comfort",
+      "Brussels Bliss",
+      "Hamburg Hideaway",
+      "Dusseldorf Delight"
+    ],
+    "names": [
+      "John Smith",
+      "Jane Doe",
+      "Michael Johnson",
+      "Emily Williams",
+      "David Brown",
+      "Sarah Davis",
+      "Robert Wilson",
+      "Olivia Taylor",
+      "James Anderson",
+      "Sophia Martinez"
+    ],
+    "emails": [
+      "john.smith@example.com",
+      "jane.doe@example.com",
+      "michael.johnson@example.com",
+      "emily.williams@example.com",
+      "david.brown@example.com",
+      "sarah.davis@example.com",
+      "robert.wilson@example.com",
+      "olivia.taylor@example.com",
+      "james.anderson@example.com",
+      "sophia.martinez@example.com"
+    ],
+    "passwords": [
+      "p@ssw0rd1",
+      "s3cur3P@ss",
+      "12345abcde",
+      "qwerty123",
+      "pass123word",
+      "letmein123",
+      "password123",
+      "welcome123",
+      "changeme123",
+      "iloveyou123"
+    ],
+
+    "cities": [
+      "Paris",
+      "Amsterdam",
+      "Cologne",
+      "Brussels",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "features": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "housingTypes": ["apartment", "house", "room", "hotel"],
+    "images": [
+      "https://example.com/image1.jpg",
+      "https://example.com/image2.jpg",
+      "https://example.com/image3.jpg",
+      "https://example.com/image4.jpg",
+      "https://example.com/image5.jpg",
+      "https://example.com/image6.jpg",
+      "https://example.com/image7.jpg",
+      "https://example.com/image8.jpg",
+      "https://example.com/image9.jpg",
+      "https://example.com/image10.jpg",
+      "https://example.com/image11.jpg",
+      "https://example.com/image12.jpg",
+      "https://example.com/image13.jpg",
+      "https://example.com/image14.jpg",
+      "https://example.com/image15.jpg",
+      "https://example.com/image16.jpg",
+      "https://example.com/image17.jpg",
+      "https://example.com/image18.jpg",
+      "https://example.com/image19.jpg",
+      "https://example.com/image20.jpg"
+    ],
+    "previews": [
+      "https://example.com/preview1.jpg",
+      "https://example.com/preview2.jpg",
+      "https://example.com/preview3.jpg",
+      "https://example.com/preview4.jpg",
+      "https://example.com/preview5.jpg",
+      "https://example.com/preview6.jpg",
+      "https://example.com/preview7.jpg"
+    ],
+    "avatars": [
+      "https://example.com/avatar1.jpg",
+      "https://example.com/avatar2.jpg",
+      "https://example.com/avatar3.jpg",
+      "https://example.com/avatar4.jpg",
+      "https://example.com/avatar5.jpg",
+      "https://example.com/avatar6.jpg",
+      "https://example.com/avatar7.jpg",
+      "https://example.com/avatar8.jpg",
+      "https://example.com/avatar9.jpg",
+      "https://example.com/avatar10.jpg"
+    ],
+    "descriptions": [
+      "Cozy apartment in the heart of Paris",
+      "Spacious house with a beautiful garden",
+      "Comfortable room with a view of the city",
+      "Luxurious hotel with top-notch amenities",
+      "Charming apartment in a historic building"
+    ]
+  }
+}

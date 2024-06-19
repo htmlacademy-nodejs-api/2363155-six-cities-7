@@ -12,3 +12,4 @@ interface ErrorObject {
 }
 
 export type { ErrorObject };
+

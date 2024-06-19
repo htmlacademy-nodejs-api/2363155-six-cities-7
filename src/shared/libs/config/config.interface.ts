@@ -3,3 +3,4 @@ interface Config<Schema> {
 }
 
 export type { Config };
+

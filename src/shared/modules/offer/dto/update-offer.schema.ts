@@ -8,3 +8,4 @@ const updateOfferDtoSchema = Joi.object<InstanceType<typeof UpdateOfferDto>>(
 ).fork(Object.keys(offerDtoSchemaObject), (schema) => schema.optional());
 
 export { updateOfferDtoSchema };
+

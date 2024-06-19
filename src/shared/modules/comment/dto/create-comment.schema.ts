@@ -2,6 +2,7 @@ import Joi from 'joi';
 import { CreateCommentDto } from './create-comment.dto.js';
 
 import { CommentLength } from '../../../constants/comment.js';
+import { Rate } from '../../../constants/offer.js';
 
 const createCommentDtoSchema: Joi.Schema<
   InstanceType<typeof CreateCommentDto>
@@ -13,6 +14,8 @@ const createCommentDtoSchema: Joi.Schema<
     .rule({
       message: `Comment length must be between ${CommentLength.MIN} and ${CommentLength.MAX} characters`,
     }),
+  rating: Joi.number().required().min(Rate.MIN).max(Rate.MAX),
 });
 
 export { createCommentDtoSchema };
+

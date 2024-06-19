@@ -20,3 +20,4 @@ class CommentRdo {
 }
 
 export { CommentRdo };
+

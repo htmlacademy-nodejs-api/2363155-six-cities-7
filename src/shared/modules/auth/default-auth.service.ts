@@ -10,7 +10,7 @@ import { Component } from '../../models/component.enum.js';
 import { UserService } from '../user/user-service.interface.js';
 import { UserEntity } from '../user/user.entity.js';
 import { TokenPayload } from '../../models/token-payload.type.js';
-import { JWT_ALGORITHM, JWT_EXPIRED } from '../../constants/auth.js';
+import { Jwt } from '../../constants/auth.js';
 import { LoginUserDto } from '../user/dto/login-user.dto.js';
 import {
   UserNotFoundError,
@@ -36,9 +36,9 @@ class DefaultAuthService implements AuthService {
 
     this.logger.info(`Create token for ${user.email}`);
     return new SignJWT(tokenPayload)
-      .setProtectedHeader({ alg: JWT_ALGORITHM })
+      .setProtectedHeader({ alg: Jwt.ALGORITHM })
       .setIssuedAt()
-      .setExpirationTime(JWT_EXPIRED)
+      .setExpirationTime(Jwt.EXPIRED)
       .sign(secretKey);
   }
 
@@ -59,3 +59,4 @@ class DefaultAuthService implements AuthService {
 }
 
 export { DefaultAuthService };
+

@@ -17,3 +17,4 @@ export const Component = {
   AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
   PathTransformer: Symbol.for('PathTransformer'),
 } as const;
+

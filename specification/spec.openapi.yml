@@ -146,18 +146,11 @@ paths:
         '415':
           description: Некорректный формат файла.
 
-  /users/{userId}/favorites:
+  /users/favorites:
     get:
       tags:
         - users
       summary: Получение списка избранных предложений пользователя.
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-          example: 5f8f1f2b5b3e2b001f3b3b3b
 
       responses:
         '200':
@@ -208,19 +201,12 @@ paths:
         '404':
           description: Пользователь или предложение не найдены.
 
-  /users/{userId}/favorites/{offerId}:
+  /users/favorites/{offerId}:
     delete:
       tags:
         - users
       summary: Удаление предложения из избранного.
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-          example: 5f8f1f2b5b3e2b001f3b3b3b
-
         - name: offerId
           in: path
           required: true
@@ -308,6 +294,28 @@ paths:
 
         '422':
           description: Некорректные данные предложения.
+
+  /offers/premiums:
+    get:
+      tags:
+        - offers
+      summary: Получение списка премиум-предложений по городу.
+      parameters:
+        - name: city
+          in: query
+          schema:
+            type: string
+          example: Paris
+
+      responses:
+        '200':
+          description: Список премиум-предложений по выбранному городу.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerReduced'
 
   /offers/{offerId}:
     get:

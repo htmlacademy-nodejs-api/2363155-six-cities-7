@@ -8,7 +8,6 @@ import * as mongoose from 'mongoose';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { UserEntity } from '../user/user.entity.js';
 import { OfferEntity } from '../offer/offer.entity.js';
-import { calculateAggregateRating } from '../../utils/rating.js';
 import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -41,9 +40,8 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, type: Array, default: [] })
   public usersRatings: number[] = [];
 
-  public get rating(): number {
-    return calculateAggregateRating(this.usersRatings);
-  }
+  @prop({ type: Number, required: true })
+  public rating: number;
 
   constructor(
     dto: CreateCommentDto,
@@ -53,9 +51,11 @@ export class CommentEntity extends defaultClasses.TimeStamps {
     super();
 
     this.text = dto.text;
+    this.rating = dto.rating;
     this.offerId = offerId;
     this.userId = userId;
   }
 }
 
 export const CommentModel = getModelForClass(CommentEntity);
+

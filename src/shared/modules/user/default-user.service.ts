@@ -7,7 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../models/component.enum.js';
 import { OfferEntity } from '../offer/offer.entity.js';
-import { UpdateOfferDto } from '../offer/dto/update-offer.dto.js';
+import { DEFAULT_AVATAR_FILE_NAME } from './user.constant.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 @injectable()
 class DefaultUserService implements UserService {
@@ -21,11 +22,18 @@ class DefaultUserService implements UserService {
     return (await this.userModel.exists({ _id: id })) !== null;
   }
 
+  public async isOwner(id: string, userId: string): Promise<boolean> {
+    return id === userId;
+  }
+
   public async create(
     dto: CreateUserDto,
     salt: string,
   ): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto);
+    const user = new UserEntity({
+      ...dto,
+      avatarUrl: DEFAULT_AVATAR_FILE_NAME,
+    });
     user.setPassword(dto.password, salt);
 
     const result = await this.userModel.create(user);
@@ -55,7 +63,7 @@ class DefaultUserService implements UserService {
 
   public async updateById(
     id: string,
-    dto: UpdateOfferDto,
+    dto: UpdateUserDto,
   ): Promise<DocumentType<UserEntity> | null> {
     return this.userModel.findByIdAndUpdate(id, dto, { new: true });
   }
@@ -67,7 +75,13 @@ class DefaultUserService implements UserService {
       .findById<DocumentType<UserEntity>>(userId)
       .populate<{
         favoriteOffers: DocumentType<OfferEntity>[];
-      }>(['favoriteOffers'])
+      }>({
+        path: 'favoriteOffers',
+        populate: {
+          path: 'userId',
+          model: 'UserEntity',
+        },
+      })
       .exec();
 
     if (!result) {
@@ -75,6 +89,16 @@ class DefaultUserService implements UserService {
     }
 
     return result.favoriteOffers;
+  }
+
+  public async findFavoritesIds(userId: string): Promise<string[] | null> {
+    const result = await this.userModel.findById(userId).exec();
+
+    if (!result) {
+      return null;
+    }
+
+    return result.favoriteOffers.map((offer) => offer._id.toString());
   }
 
   public async addOfferToFavorites(
@@ -123,3 +147,4 @@ class DefaultUserService implements UserService {
 }
 
 export { DefaultUserService };
+

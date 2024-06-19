@@ -7,3 +7,4 @@ const createOfferDtoSchema = Joi.object<InstanceType<typeof CreateOfferDto>>(
 ).fork(Object.keys(offerDtoSchemaObject), (schema) => schema.required());
 
 export { createOfferDtoSchema };
+

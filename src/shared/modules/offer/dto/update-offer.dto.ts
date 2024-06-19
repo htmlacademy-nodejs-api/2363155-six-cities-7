@@ -16,3 +16,4 @@ class UpdateOfferDto {
 }
 
 export { UpdateOfferDto };
+

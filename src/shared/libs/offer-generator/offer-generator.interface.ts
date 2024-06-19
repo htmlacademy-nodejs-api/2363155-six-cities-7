@@ -3,3 +3,4 @@ interface OfferGenerator {
 }
 
 export type { OfferGenerator };
+

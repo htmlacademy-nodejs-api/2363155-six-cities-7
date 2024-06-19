@@ -8,3 +8,4 @@ class UserNotFoundError extends BaseAuthError {
 }
 
 export { UserNotFoundError };
+

@@ -69,3 +69,4 @@ const offerDtoSchemaObject: Joi.ObjectPropertiesSchema<
 };
 
 export { offerDtoSchemaObject };
+

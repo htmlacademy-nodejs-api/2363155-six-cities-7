@@ -11,7 +11,10 @@ import type {
 } from '../shared/libs/index.js';
 import { Component } from '../shared/models/component.enum.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
-import { STATIC_UPLOAD_ROUTE } from '../shared/constants/static.js';
+import {
+  STATIC_FILES_ROUTE,
+  STATIC_UPLOAD_ROUTE,
+} from '../shared/constants/static.js';
 
 @injectable()
 class Application {
@@ -41,10 +44,10 @@ class Application {
     this.server.use(express.json());
     this.server.use(
       STATIC_UPLOAD_ROUTE,
-      express.static(this.config.get('STATIC_DIR')),
+      express.static(this.config.get('UPLOAD_DIR')),
     );
     this.server.use(
-      this.config.get('STATIC_DIR'),
+      STATIC_FILES_ROUTE,
       express.static(this.config.get('STATIC_DIR')),
     );
     this.server.use(
@@ -100,3 +103,4 @@ class Application {
 }
 
 export { Application };
+

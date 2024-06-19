@@ -3,6 +3,9 @@ import { User } from '../../../models/user.interface.js';
 
 export class UserRdo {
   @Expose()
+  public id!: string;
+
+  @Expose()
   public email!: string;
 
   @Expose()
@@ -14,3 +17,4 @@ export class UserRdo {
   @Expose()
   public type!: User['type'];
 }
+

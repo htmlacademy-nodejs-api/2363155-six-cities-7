@@ -29,6 +29,10 @@ import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.middelware.js';
 import { Config, ConfigSchema } from '../../libs/index.js';
 import { UploadMultipleFilesMiddleware } from '../../libs/rest/middleware/upload-multiple-files.middleware.js';
+import { UserService } from '../user/user-service.interface.js';
+import { DocumentOwnerMiddleware } from '../../libs/rest/middleware/document-owner.middleware.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
+import { CommentService } from '../comment/comment-service.interface.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -36,6 +40,9 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.Config) protected readonly config: Config<ConfigSchema>,
     @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.CommentService)
+    private readonly commentService: CommentService,
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
@@ -46,11 +53,26 @@ export class OfferController extends BaseController {
       'offer',
       'offerId',
     );
+    const documentOwnerMiddleware = new DocumentOwnerMiddleware(
+      this.offerService,
+      DocumentCollection.Offers,
+      'offerId',
+    );
 
     this.addRoute({
       path: OfferEndpoint.Index,
       method: HttpMethod.Get,
       handler: this.index,
+    });
+    this.addRoute({
+      path: OfferEndpoint.PremiumOffers,
+      method: HttpMethod.Get,
+      handler: this.getPremiumOffers,
+    });
+    this.addRoute({
+      path: OfferEndpoint.DetailedOffers,
+      method: HttpMethod.Get,
+      handler: this.getDetailedOffers,
     });
     this.addRoute({
       path: OfferEndpoint.Index,
@@ -59,6 +81,13 @@ export class OfferController extends BaseController {
       middlewares: [
         privateRouteMiddleware,
         new ValidateDtoMiddleware(CreateOfferDto, createOfferDtoSchema),
+        new ValidateObjectIdMiddleware('id', 'tokenPayload'),
+        new DocumentExistsMiddleware(
+          this.userService,
+          'User',
+          'id',
+          'tokenPayload',
+        ),
       ],
     });
     this.addRoute({
@@ -76,6 +105,7 @@ export class OfferController extends BaseController {
         validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
     this.addRoute({
@@ -86,8 +116,9 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
         new UploadMultipleFilesMiddleware(
-          this.config.get('STATIC_DIR'),
+          this.config.get('UPLOAD_DIR'),
           'images',
         ),
       ],
@@ -100,7 +131,8 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
-        new UploadFileMiddleware(this.config.get('STATIC_DIR'), 'previewUrl'),
+        documentOwnerMiddleware,
+        new UploadFileMiddleware(this.config.get('UPLOAD_DIR'), 'previewUrl'),
       ],
     });
     this.addRoute({
@@ -111,17 +143,40 @@ export class OfferController extends BaseController {
         privateRouteMiddleware,
         validateOfferIdMiddleware,
         offerExistsMiddleware,
+        documentOwnerMiddleware,
       ],
     });
   }
 
-  public async index(
+  private async getOffers({ query: rawQuery }: GetOffersRequest) {
+    const { filter, query } = parseOffersQuery(rawQuery);
+    const result = await this.offerService.find(filter, query);
+    return result;
+  }
+
+  public async index(req: GetOffersRequest, res: Response): Promise<void> {
+    const result = await this.getOffers(req);
+    this.ok(res, fillDTO(OfferReducedRdo, result));
+  }
+
+  public async getPremiumOffers(
     { query: rawQuery }: GetOffersRequest,
     res: Response,
   ): Promise<void> {
     const { filter, query } = parseOffersQuery(rawQuery);
-    const result = await this.offerService.find(filter, query);
-    this.ok(res, fillDTO(OfferReducedRdo, result));
+    const result = await this.offerService.find(
+      { ...filter, premium: true },
+      query,
+    );
+    this.ok(res, fillDTO(OfferRdo, result));
+  }
+
+  public async getDetailedOffers(
+    req: GetOffersRequest,
+    res: Response,
+  ): Promise<void> {
+    const result = await this.getOffers(req);
+    this.ok(res, fillDTO(OfferRdo, result));
   }
 
   public async create(
@@ -160,7 +215,10 @@ export class OfferController extends BaseController {
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    await this.offerService.deleteById(offerId);
+    await Promise.all([
+      this.offerService.deleteById(offerId),
+      this.commentService.deleteByOfferId(offerId),
+    ]);
 
     this.noContent(res);
   }
@@ -198,3 +256,4 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 }
+

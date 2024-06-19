@@ -40,3 +40,4 @@ git checkout -b module2-task1
 #### Есть вопрос?
 
 Посмотрите [коллекцию часто задаваемых вопросов по Git](http://firstaidgit.ru).
+

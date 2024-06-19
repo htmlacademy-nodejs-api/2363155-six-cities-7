@@ -61,3 +61,4 @@ class ParseTokenMiddleware implements Middleware {
 }
 
 export { ParseTokenMiddleware };
+

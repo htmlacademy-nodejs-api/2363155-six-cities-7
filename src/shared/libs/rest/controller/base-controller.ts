@@ -60,3 +60,4 @@ export abstract class BaseController implements Controller {
     this.send(res, StatusCodes.OK, data);
   }
 }
+

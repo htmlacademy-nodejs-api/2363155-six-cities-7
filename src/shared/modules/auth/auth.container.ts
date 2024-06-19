@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 
 import { AuthService } from './auth-service.interface.js';
 import { Component } from '../../models/component.enum.js';
-import { DefaultAuthService } from './auth.service.js';
+import { DefaultAuthService } from './default-auth.service.js';
 import { AuthExceptionFilter } from '../../libs/index.js';
 
 function createAuthContainer() {
@@ -20,3 +20,4 @@ function createAuthContainer() {
 }
 
 export { createAuthContainer };
+

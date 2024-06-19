@@ -7,3 +7,4 @@ export class UploadImagesRdo {
   @Expose()
   public previewUrl?: string;
 }
+

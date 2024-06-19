@@ -50,3 +50,4 @@ class AppLogger implements Logger {
 }
 
 export { AppLogger };
+

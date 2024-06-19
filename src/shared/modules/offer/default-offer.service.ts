@@ -25,6 +25,10 @@ class DefaultOfferService implements OfferService {
     return (await this.OfferModel.exists({ _id: id })) !== null;
   }
 
+  public async isOwner(id: string, userId: string): Promise<boolean> {
+    return (await this.OfferModel.findById(id))?.userId.toString() === userId;
+  }
+
   public async create(
     dto: CreateOfferDto,
     userId: string,
@@ -111,3 +115,5 @@ class DefaultOfferService implements OfferService {
 }
 
 export { DefaultOfferService };
+
+

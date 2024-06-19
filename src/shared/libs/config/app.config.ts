@@ -26,3 +26,4 @@ class AppConfig implements Config<ConfigSchema> {
 }
 
 export { AppConfig };
+

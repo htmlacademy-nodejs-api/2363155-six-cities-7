@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import { types } from '@typegoose/typegoose';
 import { OfferService } from './offer-service.interface.js';
 import { Component } from '../../models/component.enum.js';
-import { DefaultOfferService } from './offer.service.js';
+import { DefaultOfferService } from './default-offer.service.js';
 import { OfferEntity, OfferModel } from './offer.entity.js';
 import { OfferController } from './offer.controller.js';
 
@@ -26,3 +26,4 @@ const createOfferContainer = () => {
 };
 
 export { createOfferContainer };
+

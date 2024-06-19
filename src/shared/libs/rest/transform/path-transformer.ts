@@ -38,7 +38,8 @@ export class PathTransformer {
     const rootPath = this.hasDefaultImage(value)
       ? STATIC_FILES_ROUTE
       : STATIC_UPLOAD_ROUTE;
-    return `${getFullServerPath(serverHost, serverPort)}${rootPath}/${value}`;
+    const staticDir = `${getFullServerPath(serverHost, serverPort)}${rootPath}`;
+    return value.startsWith(staticDir) ? value : `${staticDir}/${value}`;
   }
 
   public execute(data: Record<string, unknown>): Record<string, unknown> {
@@ -71,3 +72,4 @@ export class PathTransformer {
     return data;
   }
 }
+

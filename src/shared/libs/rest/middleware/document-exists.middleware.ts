@@ -10,7 +10,7 @@ class DocumentExistsMiddleware implements Middleware {
     private readonly service: DocumentExists,
     private readonly entityName: string,
     private readonly paramName: string,
-    private readonly target: 'params' | 'body' = 'params',
+    private readonly target: 'params' | 'body' | 'tokenPayload' = 'params',
   ) {}
 
   public async execute(
@@ -32,3 +32,4 @@ class DocumentExistsMiddleware implements Middleware {
 }
 
 export { DocumentExistsMiddleware };
+

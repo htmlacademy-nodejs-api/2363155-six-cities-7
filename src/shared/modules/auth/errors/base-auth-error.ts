@@ -7,3 +7,4 @@ class BaseAuthError extends HttpError {
 }
 
 export { BaseAuthError };
+

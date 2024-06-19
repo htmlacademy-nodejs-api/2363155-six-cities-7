@@ -1,6 +1,5 @@
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
-
 import { CommentService } from './comment-service.interface.js';
 import { CommentEntity } from './comment.entity.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
@@ -54,6 +53,13 @@ class DefaultCommentService implements CommentService {
       .populate(['userId'])
       .exec();
   }
+
+  public async deleteByOfferId(
+    offerId: string,
+  ): Promise<mongoose.mongo.DeleteResult> {
+    return this.CommentModel.deleteMany({ offerId }).exec();
+  }
 }
 
 export { DefaultCommentService };
+

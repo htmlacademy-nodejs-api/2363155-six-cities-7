@@ -5,6 +5,7 @@ import type { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DocumentExists } from '../../models/document-exists.interface.js';
 import { SortType } from '../../models/sort-type.enum.js';
+import { DocumentOwner } from '../../models/document-owner.interface.js';
 
 type OffersFindQueryParams = Partial<{
   limit: number;
@@ -14,15 +15,15 @@ type OffersFindQueryParams = Partial<{
 
 type OffersFindFilterParams = Partial<Pick<OfferEntity, 'city' | 'premium'>>;
 
-interface OfferService extends DocumentExists {
+interface OfferService extends DocumentExists, DocumentOwner {
   create(
     dto: CreateOfferDto,
     userId: string,
   ): Promise<DocumentType<OfferEntity>>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(
-    filter?: OffersFindFilterParams,
-    query?: OffersFindQueryParams,
+    filter: OffersFindFilterParams,
+    query: OffersFindQueryParams,
   ): Promise<DocumentType<OfferEntity>[]>;
   updateById(
     offerId: string,
@@ -38,3 +39,4 @@ interface OfferService extends DocumentExists {
 }
 
 export type { OfferService, OffersFindQueryParams, OffersFindFilterParams };
+

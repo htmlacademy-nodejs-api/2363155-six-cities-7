@@ -8,3 +8,4 @@ class UserInvalidCredentialsError extends BaseAuthError {
 }
 
 export { UserInvalidCredentialsError };
+

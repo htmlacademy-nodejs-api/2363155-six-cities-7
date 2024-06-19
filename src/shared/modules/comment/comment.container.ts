@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import { types } from '@typegoose/typegoose';
 import { CommentService } from './comment-service.interface.js';
 import { Component } from '../../models/component.enum.js';
-import { DefaultCommentService } from './comment.service.js';
+import { DefaultCommentService } from './default-comment.service.js';
 import { CommentEntity, CommentModel } from './comment.entity.js';
 import { Controller } from '../../libs/index.js';
 import { CommentController } from './comment.controller.js';
@@ -27,3 +27,4 @@ const createCommentContainer = () => {
 };
 
 export { createCommentContainer };
+

@@ -67,3 +67,4 @@ type OfferReduced = Pick<
 
 export type { Offer, OfferReduced, Coordinates };
 export { City, Feature, Housing };
+

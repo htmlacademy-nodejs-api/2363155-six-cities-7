@@ -21,3 +21,4 @@ const getEnv = <T extends object>() => {
 };
 
 export { getEnv, DEFAULT_ENVIRONMENT };
+

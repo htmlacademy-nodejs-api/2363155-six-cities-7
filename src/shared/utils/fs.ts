@@ -10,3 +10,4 @@ const getPackageJsonPath = () =>
   path.resolve(getCurrentModuleDirectoryPath(), '../../../package.json');
 
 export { getCurrentModuleDirectoryPath, getPackageJsonPath };
+

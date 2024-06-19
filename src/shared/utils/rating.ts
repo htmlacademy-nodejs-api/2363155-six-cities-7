@@ -6,3 +6,4 @@ const calculateAggregateRating = (ratings: number[]) => {
 };
 
 export { calculateAggregateRating };
+

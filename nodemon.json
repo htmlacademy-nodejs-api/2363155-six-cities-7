@@ -3,3 +3,4 @@
   "ext": "ts, json",
   "exec": "npm run ts ./src/main.ts | pino-pretty --colorize"
 }
+

@@ -4,3 +4,4 @@ export class UploadUserAvatarRdo {
   @Expose()
   public avatarUrl!: string;
 }
+

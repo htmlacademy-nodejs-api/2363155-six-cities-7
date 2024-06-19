@@ -4,6 +4,8 @@ class CreateOfferDto {
   public name!: Offer['name'];
   public description!: Offer['description'];
   public city!: Offer['city'];
+  public previewUrl!: Offer['previewUrl'];
+  public images!: Offer['images'];
   public premium!: Offer['premium'];
   public housing!: Offer['housing'];
   public rooms!: Offer['rooms'];
@@ -14,3 +16,4 @@ class CreateOfferDto {
 }
 
 export { CreateOfferDto };
+

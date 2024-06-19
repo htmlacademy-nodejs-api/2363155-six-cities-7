@@ -4,7 +4,7 @@ import { ConfigSchema, TSVFileReader } from '../../shared/libs/index.js';
 import { Offer } from '../../shared/models/offer.interface.js';
 import { DefaultUserService } from '../../shared/modules/user/default-user.service.js';
 import { UserModel } from '../../shared/modules/user/user.entity.js';
-import { DefaultOfferService } from '../../shared/modules/offer/offer.service.js';
+import { DefaultOfferService } from '../../shared/modules/offer/default-offer.service.js';
 import { OfferModel } from '../../shared/modules/offer/offer.entity.js';
 import { getEnv } from '../../shared/utils/env.js';
 import { configureApp } from '../application/index.js';

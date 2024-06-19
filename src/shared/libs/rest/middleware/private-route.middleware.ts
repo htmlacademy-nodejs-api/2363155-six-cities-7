@@ -23,3 +23,4 @@ class PrivateRouteMiddleware implements Middleware {
 }
 
 export { PrivateRouteMiddleware };
+

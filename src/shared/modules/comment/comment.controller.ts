@@ -71,9 +71,13 @@ class CommentController extends BaseController {
       params.offerId,
       tokenPayload.id,
     );
-    await this.offerService.incCommentsAmount(params.offerId);
+    await Promise.all([
+      this.offerService.incCommentsAmount(params.offerId),
+      this.offerService.updateRating(params.offerId, body.rating),
+    ]);
     this.created(res, fillDTO(CommentRdo, result));
   }
 }
 
 export { CommentController };
+

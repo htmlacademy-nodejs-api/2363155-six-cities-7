@@ -18,7 +18,7 @@ class OfferReducedRdo {
   public premium!: OfferReduced['premium'];
 
   @Expose()
-  public favourite!: OfferReduced['favorite'];
+  public favorite!: OfferReduced['favorite'];
 
   @Expose()
   public housing!: OfferReduced['housing'];
@@ -37,3 +37,4 @@ class OfferReducedRdo {
 }
 
 export { OfferReducedRdo };
+

@@ -22,13 +22,10 @@ const createUserDtoSchema: Joi.Schema<InstanceType<typeof CreateUserDto>> =
       }),
 
     email: Joi.string().email().message('User email is not valid').required(),
-    avatarUrl: Joi.string()
-      .optional()
-      .uri()
-      .message('Avatar URL must be valid URL string'),
     type: Joi.string()
       .required()
       .valid(...Object.values(UserType)),
   });
 
 export { createUserDtoSchema };
+

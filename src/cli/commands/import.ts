@@ -7,7 +7,7 @@ import { UserModel } from '../../shared/modules/user/user.entity.js';
 import { DefaultOfferService } from '../../shared/modules/offer/offer.service.js';
 import { OfferModel } from '../../shared/modules/offer/offer.entity.js';
 import { getEnv } from '../../utils/env.js';
-import { configureApp } from '../application.config.js';
+import { configureApp } from '../application/index.js';
 
 const program = new Command();
 

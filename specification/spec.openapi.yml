@@ -1,0 +1,475 @@
+openapi: 3.0.0
+info:
+  title: API для учебного проекта "Шесть городов"
+  version: 1.0.0
+  description: Список ресурсов и маршрутов API «Шесть городов».
+  contact:
+    name: Anatoly Dolgov
+    email: avylando@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:3456
+    description: Development server
+
+tags:
+  - name: offers
+    description: Действия с предложениями.
+  - name: users
+    description: Действия с пользователями.
+
+paths:
+  /users/sign-up:
+    post:
+      tags:
+        - users
+      summary: Регистрация нового пользователя.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+
+      responses:
+        '201':
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '409':
+          description: Пользователь с таким email уже существует.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Аутентификация пользователя.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@mail.ru
+
+                password:
+                  type: string
+                  example: secretpassword
+
+      responses:
+        '200':
+          description: Пользователь аутентифицирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Неверный email или пароль.
+
+    get:
+      tags:
+        - users
+      summary: Получение информации о текущем пользователе.
+      responses:
+        '200':
+          description: Информация о текущем пользователе.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        '401':
+          description: Пользователь не авторизован.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Завершение пользовательской сессии.
+      responses:
+        '204':
+          description: Сессия завершена успешно.
+
+        '401':
+          description: Пользователь не авторизован.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Получение списка предложений.
+      responses:
+        '200':
+          description: Список предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+
+      responses:
+        '201':
+          description: Предложение создано. Объект предложения.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        '422':
+          description: Некорректные данные предложения.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Получение детальной информации о предложении.
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '200':
+          description: Информация о предложении.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        '404':
+          description: Предложение не найдено.
+
+    put:
+      tags:
+        - offers
+      summary: Обновление информации о предложении.
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+
+      responses:
+        '200':
+          description: Информация о предложении обновлена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        '404':
+          description: Предложение не найдено.
+
+    delete:
+      tags:
+        - offers
+      summary: Удаление предложения.
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '204':
+          description: Предложение удалено.
+
+        '404':
+          description: Предложение не найдено.
+
+  /offers/{offerId}/comments:
+    get:
+      tags:
+        - offers
+      summary: Получение списка комментариев к предложению.
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '200':
+          description: Список комментариев.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+
+    post:
+      tags:
+        - offers
+      summary: Создание нового комментария к предложению.
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+
+      responses:
+        '201':
+          description: Комментарий создан. Объект комментария.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+
+        '404':
+          description: Предложение не найдено.
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: example@mail.ru
+
+        name:
+          type: string
+          example: Jane Doe
+
+        password:
+          type: string
+          example: secretpassword
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        email:
+          type: string
+          example: example@mail.ru
+
+        name:
+          type: string
+          example: Jane Doe
+
+        type:
+          type: string
+          example: pro
+
+    createOffer:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Продам квартиру
+
+        price:
+          type: number
+          example: 100000
+
+        description:
+          type: string
+          example: Просторная квартира в центре города.
+
+        city:
+          type: string
+          example: Paris
+
+        previewUrl:
+          type: string
+          example: https://example.com/preview.jpg
+
+        images:
+          type: array
+          items:
+            type: string
+          example:
+            - https://example.com/image1.jpg
+            - https://example.com/image2.jpg
+
+        premium:
+          type: boolean
+          example: true
+
+        housing:
+          type: string
+          example: apartment
+
+        rooms:
+          type: number
+          example: 3
+
+        guests:
+          type: number
+          example: 4
+
+        features:
+          type: array
+          items:
+            type: string
+          example:
+            - Breakfast
+            - Air conditioning
+            - Laptop friendly workspace
+            - Baby seat
+            - Washer
+            - Towels
+            - Fridge
+
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        name:
+          type: string
+          example: Продам квартиру
+
+        price:
+          type: number
+          example: 100000
+
+        description:
+          type: string
+          example: Просторная квартира в центре города.
+
+        city:
+          type: string
+          example: Paris
+
+        previewUrl:
+          type: string
+          example: https://example.com/preview.jpg
+
+        images:
+          type: array
+          items:
+            type: string
+          example:
+            - https://example.com/image1.jpg
+            - https://example.com/image2.jpg
+
+        premium:
+          type: boolean
+          example: true
+
+        favorite:
+          type: boolean
+          example: false
+
+        rating:
+          type: number
+          example: 4.5
+
+        housing:
+          type: string
+          example: apartment
+
+        rooms:
+          type: number
+          example: 3
+
+        guests:
+          type: number
+          example: 4
+
+        features:
+          type: array
+          items:
+            type: string
+          example:
+            - wifi
+            - heating
+            - kitchen
+
+        author:
+          $ref: '#/components/schemas/user'
+
+        commentsAmount:
+          type: number
+          example: 5
+
+        createdAt:
+          type: string
+          example: 2020-10-20T08:00:00.000Z
+
+    createComment:
+      type: object
+
+      properties:
+        text:
+          type: string
+          example: Отличное предложение!
+
+    comment:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        text:
+          type: string
+          example: Отличное предложение!
+
+        createdAt:
+          type: string
+          example: 2020-10-20T08:00:00.000Z
+
+        rating:
+          type: number
+          example: 5
+
+        author:
+          $ref: '#/components/schemas/user'

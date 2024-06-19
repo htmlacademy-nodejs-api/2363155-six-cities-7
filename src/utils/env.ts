@@ -2,8 +2,10 @@ import dotenv from 'dotenv';
 import path from 'node:path';
 import { getCurrentModuleDirectoryPath } from './fs.js';
 
+const DEFAULT_ENVIRONMENT = 'development';
+
 const getEnv = <T extends object>() => {
-  const mode = process.env.NODE_ENV || 'development';
+  const mode = process.env.NODE_ENV || DEFAULT_ENVIRONMENT;
   const { parsed } = dotenv.config({
     path: path.resolve(getCurrentModuleDirectoryPath(), `../../.env.${mode}`),
   });
@@ -15,4 +17,4 @@ const getEnv = <T extends object>() => {
   return parsed as T;
 };
 
-export { getEnv };
+export { getEnv, DEFAULT_ENVIRONMENT };

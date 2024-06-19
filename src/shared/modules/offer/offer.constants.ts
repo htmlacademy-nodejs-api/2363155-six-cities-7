@@ -1,0 +1,3 @@
+const DEFAULT_OFFERS_LIMIT = 60;
+
+export { DEFAULT_OFFERS_LIMIT };

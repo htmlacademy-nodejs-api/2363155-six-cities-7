@@ -11,14 +11,15 @@ enum City {
 
 type Housing = 'apartment' | 'house' | 'room' | 'hotel';
 
-type Feature =
-  | 'Breakfast'
-  | 'Air conditioning'
-  | 'Laptop friendly workspace'
-  | 'Baby seat'
-  | 'Washer'
-  | 'Towels'
-  | 'Fridge';
+enum Feature {
+  Breakfast = 'Breakfast',
+  AirConditioning = 'Air conditioning',
+  LaptopFriendlyWorkspace = 'Laptop friendly workspace',
+  BabySeat = 'Baby seat',
+  Washer = 'Washer',
+  Towels = 'Towels',
+  Fridge = 'Fridge',
+}
 
 type Coordinates = {
   lat: number;
@@ -34,7 +35,6 @@ interface Offer {
   images: string[];
   premium: boolean;
   favorite: boolean;
-  rating: number;
   housing: Housing;
   rooms: number;
   guests: number;
@@ -45,5 +45,5 @@ interface Offer {
   coordinates: Coordinates;
 }
 
-export type { Offer, Feature, Coordinates, Housing };
-export { City };
+export type { Offer, Coordinates, Housing };
+export { City, Feature };

@@ -1,5 +1,5 @@
 import type { OfferGenerator } from './offer-generator.interface.js';
-import type { MockServerData, UserType } from '../../models/index.js';
+import { MockServerData, UserType } from '../../../models/index.js';
 import {
   getRandomNumberInRange,
   getRandomArrayItem,
@@ -7,7 +7,7 @@ import {
   getRandomDate,
   getRandomBoolean,
   getRandomFloatInRange,
-} from '../../utils/index.js';
+} from '../../../utils/index.js';
 
 const Price = {
   MIN: 100,
@@ -44,7 +44,7 @@ const COORDINATES_FRACTION_DIGITS = 6;
 const OFFER_IMAGES_AMOUNT = 6;
 
 const ARRAY_DELIMITER = ';';
-const USER_TYPES: UserType[] = ['plain', 'pro'];
+const USER_TYPES: UserType[] = [UserType.Plain, UserType.Pro];
 
 class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
@@ -64,8 +64,8 @@ class TSVOfferGenerator implements OfferGenerator {
     const price = getRandomNumberInRange(Price.MIN, Price.MAX).toString();
     const date = getRandomDate().toISOString();
     const authorName = getRandomArrayItem<string>(this.mockData.names);
-    const password = getRandomArrayItem(this.mockData.passwords);
     const authorEmail = getRandomArrayItem(this.mockData.emails);
+    const password = getRandomArrayItem(this.mockData.passwords);
     const avatarUrl = getRandomArrayItem(this.mockData.avatars);
     const previewUrl = getRandomArrayItem(this.mockData.previews);
     const premium = getRandomBoolean();
@@ -101,9 +101,9 @@ class TSVOfferGenerator implements OfferGenerator {
       price,
       features,
       authorName,
+      password,
       authorEmail,
       avatarUrl,
-      password,
       userType,
       latitude,
       longitude,

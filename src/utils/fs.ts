@@ -1,9 +1,12 @@
 import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import path, { dirname } from 'node:path';
 
 const getCurrentModuleDirectoryPath = () => {
   const filepath = fileURLToPath(import.meta.url);
   return dirname(filepath);
 };
 
-export { getCurrentModuleDirectoryPath };
+const getPackageJsonPath = () =>
+  path.resolve(getCurrentModuleDirectoryPath(), '../../package.json');
+
+export { getCurrentModuleDirectoryPath, getPackageJsonPath };

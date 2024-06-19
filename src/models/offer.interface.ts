@@ -1,12 +1,13 @@
 import { User } from './user.interface.js';
 
-type City =
-  | 'Paris'
-  | 'Amsterdam'
-  | 'Cologne'
-  | 'Brussels'
-  | 'Hamburg'
-  | 'Dusseldorf';
+enum City {
+  Paris = 'Paris',
+  Amsterdam = 'Amsterdam',
+  Cologne = 'Cologne',
+  Brussels = 'Brussels',
+  Hamburg = 'Hamburg',
+  Dusseldorf = 'Dusseldorf',
+}
 
 type Housing = 'apartment' | 'house' | 'room' | 'hotel';
 
@@ -27,7 +28,7 @@ type Coordinates = {
 interface Offer {
   name: string;
   description: string;
-  date: string;
+  createdAt: Date;
   city: City;
   previewUrl: string;
   images: string[];
@@ -44,4 +45,5 @@ interface Offer {
   coordinates: Coordinates;
 }
 
-export type { Offer, Feature, City, Coordinates, Housing };
+export type { Offer, Feature, Coordinates, Housing };
+export { City };

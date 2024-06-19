@@ -9,6 +9,7 @@ import type {
   ExceptionFilter,
 } from '../shared/libs/index.js';
 import { Component } from '../shared/models/component.enum.js';
+import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
 
 @injectable()
 class Application {
@@ -20,6 +21,8 @@ class Application {
     @inject(Component.DBClient) private readonly dbClient: DBClient,
     @inject(Component.ExceptionFilter)
     private readonly exceptionFilter: ExceptionFilter,
+    @inject(Component.AuthExceptionFilter)
+    private readonly authExceptionFilter: ExceptionFilter,
     @inject(Component.UserController)
     private readonly userController: Controller,
     @inject(Component.OfferController)
@@ -29,8 +32,15 @@ class Application {
   ) {}
 
   private async initServerMiddleware() {
+    const authenticateMiddleware = new ParseTokenMiddleware(
+      this.config.get('JWT_SECRET'),
+    );
+
     this.server.use(express.json());
     this.server.use('/upload', express.static(this.config.get('STATIC_DIR')));
+    this.server.use(
+      authenticateMiddleware.execute.bind(authenticateMiddleware),
+    );
   }
 
   private async initControllers() {
@@ -40,6 +50,9 @@ class Application {
   }
 
   private async initExceptionFilters() {
+    this.server.use(
+      this.authExceptionFilter.catch.bind(this.authExceptionFilter),
+    );
     this.server.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 

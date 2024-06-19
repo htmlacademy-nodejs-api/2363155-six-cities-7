@@ -16,6 +16,7 @@ import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-ex
 import { ValidateDtoMiddleware } from '../../libs/rest/middleware/validate-dto.middleware.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { createCommentDtoSchema } from './dto/create-comment.schema.js';
+import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
 
 @injectable()
 class CommentController extends BaseController {
@@ -27,6 +28,7 @@ class CommentController extends BaseController {
   ) {
     super(logger);
     this.logger.info('Register routes for CommentController…');
+    const privateRouteMiddleware = new PrivateRouteMiddleware();
     const validateOfferIdMiddleware = new ValidateObjectIdMiddleware('offerId');
     const validateUserIdMiddleware = new ValidateObjectIdMiddleware(
       'userId',
@@ -48,6 +50,7 @@ class CommentController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        privateRouteMiddleware,
         validateOfferIdMiddleware,
         validateUserIdMiddleware,
         new ValidateDtoMiddleware(CreateCommentDto, createCommentDtoSchema),

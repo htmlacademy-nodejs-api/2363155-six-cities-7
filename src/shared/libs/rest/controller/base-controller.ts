@@ -34,7 +34,7 @@ export abstract class BaseController implements Controller {
     );
   }
 
-  public send<T>(res: Response, statusCode: number, data: T): void {
+  public send<T>(res: Response, statusCode: number, data?: T): void {
     res.type(this.DEFAULT_CONTENT_TYPE).status(statusCode).json(data);
   }
 
@@ -42,8 +42,8 @@ export abstract class BaseController implements Controller {
     this.send(res, StatusCodes.CREATED, data);
   }
 
-  public noContent<T>(res: Response, data: T): void {
-    this.send(res, StatusCodes.NO_CONTENT, data);
+  public noContent(res: Response): void {
+    this.send(res, StatusCodes.NO_CONTENT);
   }
 
   public ok<T>(res: Response, data: T): void {

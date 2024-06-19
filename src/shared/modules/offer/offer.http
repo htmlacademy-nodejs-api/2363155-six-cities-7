@@ -10,15 +10,16 @@ Content-Type: application/json
 
 POST http://localhost:3456/offers HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2NjYzYWIzYWM2NjQ3YTM3MGY4OTg2ZCIsImVtYWlsIjoiY0BkLnJ1IiwibmFtZSI6IkRlYW4gV2luY2hlc3RlciIsImlhdCI6MTcxNzk3NTgxMCwiZXhwIjoxNzE4MTQ4NjEwfQ.OFdP2XsGtZVTu5982YUC4xbeK3NCXtY-8TT3FQbXSKE
 
 {
   "name": "Предложение 1",
   "description": "Описание предложения 1",
-  "price": 100,
-  "city": "Paris",
-  "housing": "apartment",
-  "rooms": 2,
-  "guests": 4,
+  "price": 2345,
+  "city": "Cologne",
+  "housing": "hotel",
+  "rooms": 1,
+  "guests": 2,
   "previewUrl": "https://example.com/preview.jpg",
   "features": [
     "Baby seat",
@@ -55,6 +56,7 @@ Content-Type: application/json
 
 PUT http://localhost:3456/offers/66523434115ea323dacecd68 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2NjYzYWIzYWM2NjQ3YTM3MGY4OTg2ZCIsImVtYWlsIjoiY0BkLnJ1IiwibmFtZSI6IkRlYW4gV2luY2hlc3RlciIsImlhdCI6MTcxNzk3NTgxMCwiZXhwIjoxNzE4MTQ4NjEwfQ.OFdP2XsGtZVTu5982YUC4xbeK3NCXtY-8TT3FQbXSKE
 
 {
   "price": 9999,
@@ -67,5 +69,6 @@ Content-Type: application/json
 ## Удалить предложение
 
 DELETE http://localhost:3456/offers/66523434115ea323dacecd66 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY2NjYzYWIzYWM2NjQ3YTM3MGY4OTg2ZCIsImVtYWlsIjoiY0BkLnJ1IiwibmFtZSI6IkRlYW4gV2luY2hlc3RlciIsImlhdCI6MTcxNzk3NTgxMCwiZXhwIjoxNzE4MTQ4NjEwfQ.OFdP2XsGtZVTu5982YUC4xbeK3NCXtY-8TT3FQbXSKE
 
 ###

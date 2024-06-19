@@ -198,6 +198,12 @@ paths:
       responses:
         '200':
           description: Предложение добавлено в избранное.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerReduced'
 
         '404':
           description: Пользователь или предложение не найдены.
@@ -223,8 +229,14 @@ paths:
           example: 5f8f1f2b5b3e2b001f3b3b3b
 
       responses:
-        '204':
+        '200':
           description: Предложение удалено из избранного.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerReduced'
 
         '404':
           description: Пользователь или предложение не найдены.

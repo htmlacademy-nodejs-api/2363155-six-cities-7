@@ -1,0 +1,4 @@
+const JWT_ALGORITHM = 'HS256';
+const JWT_EXPIRED = '2d';
+
+export { JWT_ALGORITHM, JWT_EXPIRED };

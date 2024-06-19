@@ -12,13 +12,13 @@ export interface UserService extends DocumentExists {
     dto: CreateUserDto,
     salt: string,
   ): Promise<DocumentType<UserEntity>>;
-  findFavorites(userId: string): Promise<DocumentType<OfferEntity[]>>;
+  findFavorites(userId: string): Promise<DocumentType<OfferEntity>[] | null>;
   addOfferToFavorites(
     userId: string,
     offerId: string,
-  ): Promise<DocumentType<UserEntity> | null>;
+  ): Promise<DocumentType<OfferEntity>[] | null>;
   removeOfferFromFavorites(
     userId: string,
     offerId: string,
-  ): Promise<DocumentType<UserEntity> | null>;
+  ): Promise<DocumentType<OfferEntity>[] | null>;
 }

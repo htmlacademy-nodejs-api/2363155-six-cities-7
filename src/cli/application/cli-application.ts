@@ -19,8 +19,13 @@ const configureApp = async () => {
   const config = new AppConfig();
   const dbClient = new MongoDBClient(config, logger);
   const userService = new DefaultUserService(logger, UserModel);
-  const userController = new UserController(logger, userService, config);
   const offerService = new DefaultOfferService(logger, OfferModel);
+  const userController = new UserController(
+    logger,
+    userService,
+    offerService,
+    config,
+  );
   const offerController = new OfferController(
     logger,
     offerService,

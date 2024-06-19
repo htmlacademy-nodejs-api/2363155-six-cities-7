@@ -1,11 +1,17 @@
 import { inject, injectable } from 'inversify';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import { BaseController, HttpMethod } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../models/index.js';
-import { CreateUserRequest, LoginUserRequest } from './user-request.type.js';
+import {
+  AddFavoriteOfferRequest,
+  CreateUserRequest,
+  LoginUserRequest,
+  RemoveFavoriteOfferRequest,
+  RequestUserParams,
+} from './user-request.type.js';
 import { UserService } from './user-service.interface.js';
 import { Config, ConfigSchema } from '../../libs/config/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
@@ -17,12 +23,20 @@ import { LoginUserDto } from './dto/login-user.dto.js';
 import { loginUserDtoSchema } from './dto/login-user.schema.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { createUserDtoSchema } from './dto/create-user.schema.js';
+import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.middelware.js';
+import { ValidateObjectIdMiddleware } from '../../libs/rest/middleware/validate-object-id.middleware.js';
+import { AddFavoriteOfferDto } from './dto/add-favorite-offer.dto.js';
+import { addFavoriteOfferDtoSchema } from './dto/add-favorite-offer.schema.js';
+import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
+import { OfferService } from '../offer/offer-service.interface.js';
+import { OfferReducedRdo } from '../offer/rdo/offer-reduced.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
+    @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.Config)
     private readonly configService: Config<ConfigSchema>,
   ) {
@@ -49,6 +63,57 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.logout,
     });
+    this.addRoute({
+      path: UserEndpoint.UploadAvatar,
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+        new UploadFileMiddleware(
+          this.configService.get('STATIC_DIR'),
+          'avatar',
+        ),
+      ],
+    });
+    this.addRoute({
+      path: UserEndpoint.UserFavorites,
+      method: HttpMethod.Get,
+      handler: this.showFavorites,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+      ],
+    });
+    this.addRoute({
+      path: UserEndpoint.UserFavorites,
+      method: HttpMethod.Post,
+      handler: this.addOfferToFavorites,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new ValidateObjectIdMiddleware('offerId', 'body'),
+        new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+        new DocumentExistsMiddleware(
+          this.offerService,
+          'offer',
+          'offerId',
+          'body',
+        ),
+        new ValidateDtoMiddleware(
+          AddFavoriteOfferDto,
+          addFavoriteOfferDtoSchema,
+        ),
+      ],
+    });
+    this.addRoute({
+      path: UserEndpoint.RemoveFromFavorites,
+      method: HttpMethod.Delete,
+      handler: this.removeOfferFromFavorites,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new ValidateObjectIdMiddleware('offerId'),
+      ],
+    });
   }
 
   public async create(
@@ -72,10 +137,7 @@ export class UserController extends BaseController {
     this.created(res, fillDTO(UserRdo, result));
   }
 
-  public async login(
-    { body }: LoginUserRequest,
-    _res: Response,
-  ): Promise<void> {
+  public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const existsUser = await this.userService.findByEmail(body.email);
 
     if (!existsUser) {
@@ -86,11 +148,7 @@ export class UserController extends BaseController {
       );
     }
 
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
+    this.ok(res, fillDTO(UserRdo, existsUser));
   }
 
   public async logout(_req: object, _res: Response): Promise<void> {
@@ -99,5 +157,41 @@ export class UserController extends BaseController {
       'Not implemented',
       'UserController',
     );
+  }
+
+  public async showFavorites(
+    { params }: Request<RequestUserParams>,
+    res: Response,
+  ): Promise<void> {
+    const result = await this.userService.findFavorites(params.userId);
+    this.ok(res, fillDTO(OfferReducedRdo, result));
+  }
+
+  public async addOfferToFavorites(
+    { params, body }: AddFavoriteOfferRequest,
+    res: Response,
+  ): Promise<void> {
+    const result = await this.userService.addOfferToFavorites(
+      params.userId,
+      body.offerId,
+    );
+    this.ok(res, fillDTO(UserRdo, result));
+  }
+
+  public async removeOfferFromFavorites(
+    { params }: RemoveFavoriteOfferRequest,
+    res: Response,
+  ): Promise<void> {
+    const result = await this.userService.removeOfferFromFavorites(
+      params.userId,
+      params.offerId,
+    );
+    this.noContent(res, fillDTO(UserRdo, result));
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {
+      avatarUrl: req.file?.path,
+    });
   }
 }

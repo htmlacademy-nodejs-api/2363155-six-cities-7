@@ -46,9 +46,24 @@ interface Offer {
   price: number;
   features: Feature[];
   author: User;
+  rating: number;
   commentsAmount?: number;
   coordinates: Coordinates;
 }
 
-export type { Offer, Coordinates };
+type OfferReduced = Pick<
+  Offer,
+  | 'name'
+  | 'city'
+  | 'previewUrl'
+  | 'price'
+  | 'housing'
+  | 'createdAt'
+  | 'favorite'
+  | 'premium'
+  | 'rating'
+  | 'commentsAmount'
+>;
+
+export type { Offer, OfferReduced, Coordinates };
 export { City, Feature, Housing };

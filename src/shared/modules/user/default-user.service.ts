@@ -6,6 +6,7 @@ import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../models/component.enum.js';
+import { OfferEntity } from '../offer/offer.entity.js';
 
 @injectable()
 export class DefaultUserService implements UserService {
@@ -49,5 +50,45 @@ export class DefaultUserService implements UserService {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async findFavorites(
+    userId: string,
+  ): Promise<DocumentType<OfferEntity[]>> {
+    const result = await this.userModel
+      .findById(userId)
+      .populate('favoriteOffers')
+      .exec();
+
+    if (!result) {
+      return [] as unknown as DocumentType<OfferEntity[]>;
+    }
+    return result.favoriteOffers as unknown as DocumentType<OfferEntity[]>;
+  }
+
+  public async addOfferToFavorites(
+    userId: string,
+    offerId: string,
+  ): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $addToSet: { favoriteOffers: offerId } },
+        { new: true },
+      )
+      .exec();
+  }
+
+  public async removeOfferFromFavorites(
+    userId: string,
+    offerId: string,
+  ): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { favoriteOffers: offerId } },
+        { new: true },
+      )
+      .exec();
   }
 }

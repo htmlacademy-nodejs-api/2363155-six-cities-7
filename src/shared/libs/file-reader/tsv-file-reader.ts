@@ -42,6 +42,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       userType,
       latitude,
       longitude,
+      rating,
       commentsAmount,
     ] = line.split('\t');
 
@@ -73,6 +74,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         lat: this.parseFloat(latitude),
         lng: this.parseFloat(longitude),
       },
+      rating: this.parseFloat(rating),
     };
   }
 

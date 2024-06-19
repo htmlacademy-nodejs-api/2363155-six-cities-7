@@ -5,11 +5,11 @@ import { OfferService } from './offer-service.interface.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { Logger } from '../../libs/index.js';
-import { Component } from '../../../models/component.enum.js';
+import { Component } from '../../models/component.enum.js';
 import { DEFAULT_OFFERS_LIMIT } from './offer.constants.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { SortType } from '../../../models/sort-type.enum.js';
-import { City } from '../../../models/offer.interface.js';
+import { SortType } from '../../models/sort-type.enum.js';
+import { City } from '../../models/offer.interface.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {

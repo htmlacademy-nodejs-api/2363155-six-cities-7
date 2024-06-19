@@ -7,7 +7,7 @@ import {
   Offer,
   User,
   UserType,
-} from '../../../models/index.js';
+} from '../../models/index.js';
 import EventEmitter from 'node:events';
 
 const DECIMAL_RADIX = 10;

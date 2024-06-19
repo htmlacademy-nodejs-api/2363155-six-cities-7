@@ -1,5 +1,5 @@
 import type { OfferGenerator } from './offer-generator.interface.js';
-import { MockServerData, UserType } from '../../../models/index.js';
+import { MockServerData, UserType } from '../../models/index.js';
 import {
   getRandomNumberInRange,
   getRandomArrayItem,
@@ -7,7 +7,7 @@ import {
   getRandomDate,
   getRandomBoolean,
   getRandomFloatInRange,
-} from '../../../utils/index.js';
+} from '../../utils/index.js';
 
 const Price = {
   MIN: 100,

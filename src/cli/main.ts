@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import { Command } from 'commander';
-import { getPackageJsonPath } from '../utils/index.js';
+import { getPackageJsonPath } from '../shared/utils/index.js';
 import { importCommand, generateCommand } from './commands/index.js';
 
 const packageUrl = getPackageJsonPath();

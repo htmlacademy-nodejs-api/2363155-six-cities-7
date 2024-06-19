@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Comment } from '../../../../models/comment.interface.js';
+import { Comment } from '../../../models/comment.interface.js';
 
 class CreateCommentDto {
   public text!: Comment['text'];

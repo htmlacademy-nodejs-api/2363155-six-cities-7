@@ -1,0 +1,66 @@
+# Предложения
+## Получить список предложений
+
+GET http://localhost:3456/offers HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Cоздать новое предложение
+
+POST http://localhost:3456/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Предложение 1",
+  "description": "Описание предложения 1",
+  "price": 1000,
+  "city": "Paris",
+  "housing": "apartment",
+  "rooms": 2,
+  "guests": 4,
+  "previewUrl": "https://example.com/preview.jpg",
+  "features": [
+    "Baby seat",
+    "Washer",
+    "Towels",
+    "Fridge"
+  ],
+  "images": [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg"
+  ],
+  "userId": "6652339b811be39a7a8ed1f2",
+  "coordinates": {
+    "latitude": 55.7558,
+    "longitude": 37.6176
+  }
+}
+
+###
+
+## Получить детализированное предложение
+
+GET http://localhost:3456/offers/66523434115ea323dacecd68 HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Oбновить данные предложения
+
+PUT http://localhost:3456/offers/66523434115ea323dacecd68 HTTP/1.1
+Content-Type: application/json
+
+{
+  "price": 9999,
+  "city": "Amsterdam",
+  "housing": "apartment"
+}
+
+###
+
+## Удалить предложение
+
+DELETE http://localhost:3456/offers/66523434115ea323dacecd66 HTTP/1.1
+
+###

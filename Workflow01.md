@@ -1,3 +1,8 @@
+http-status-codes. Пакет предоставляет перечисление со всеми HTTP-кодами.
+express, @types/express. Фреймворк Express и декларации типов.
+class-transformer. Пакет поможет конвертировать объекты в DTO.
+express-async-handler. Для обработки ошибок в асинхронных обработчиках.
+
 nodemon.json
 .\/dist/main.cli.js --help   Windows
 

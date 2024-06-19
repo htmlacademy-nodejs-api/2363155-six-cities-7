@@ -7,7 +7,7 @@ import {
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { UserEntity } from '../user/user.entity.js';
 import { OfferEntity } from '../offer/offer.entity.js';
-import { calculateAggregateRating } from '../../../utils/rating.js';
+import { calculateAggregateRating } from '../../utils/rating.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface CommentEntity extends defaultClasses.Base {}

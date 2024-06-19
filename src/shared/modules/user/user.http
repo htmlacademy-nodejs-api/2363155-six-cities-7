@@ -1,0 +1,33 @@
+# Пользователи
+## Создать нового пользователя
+
+POST http://localhost:3456/users/sign-up HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "example@example.com",
+  "password": "sample",
+  "name": "John Doe",
+  "type": "plain"
+}
+
+###
+
+## Авторизовать пользователя
+
+POST http://localhost:3456/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "example@example.com",
+  "password": "sample",
+}
+
+###
+
+## Разлогинить пользователя
+
+POST http://localhost:3456/users/logout HTTP/1.1
+Content-Type: application/json
+
+###

@@ -2,11 +2,11 @@ import { inject, injectable } from 'inversify';
 import * as Mongoose from 'mongoose';
 import { setTimeout } from 'node:timers/promises';
 import { DBClient } from './db-client.interface.js';
-import { Component } from '../../../models/component.enum.js';
+import { Component } from '../../models/component.enum.js';
 import { Config } from '../config/config.interface.js';
 import { ConfigSchema } from '../config/config.schema.js';
 import { Logger } from '../logger/logger.interface.js';
-import { getMongoURI } from '../../../utils/database.js';
+import { getMongoURI } from '../../utils/database.js';
 
 const RETRIES_LIMIT = 3;
 const RETRY_DELAY = 2000;

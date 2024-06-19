@@ -30,7 +30,7 @@ const importCommand = program
           env.SALT,
         );
 
-        await offerService.create({ ...offer, userId: user.id });
+        await offerService.create(offer, user.id);
       };
 
       const promises: Promise<void>[] = [];

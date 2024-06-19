@@ -33,6 +33,8 @@ import { OfferReducedRdo } from '../offer/rdo/offer-reduced.rdo.js';
 import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
 import { AuthService } from '../auth/auth-service.interface.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -61,6 +63,11 @@ export class UserController extends BaseController {
       middlewares: [
         new ValidateDtoMiddleware(LoginUserDto, loginUserDtoSchema),
       ],
+    });
+    this.addRoute({
+      path: UserEndpoint.LogIn,
+      method: HttpMethod.Get,
+      handler: this.checkToken,
     });
     this.addRoute({
       path: UserEndpoint.LogOut,
@@ -163,6 +170,13 @@ export class UserController extends BaseController {
     this.ok(res, responseData);
   }
 
+  public async checkToken(
+    { tokenPayload }: Request,
+    res: Response,
+  ): Promise<void> {
+    this.ok(res, tokenPayload);
+  }
+
   public async logout(_req: object, _res: Response): Promise<void> {
     throw new HttpError(
       StatusCodes.NOT_IMPLEMENTED,
@@ -201,9 +215,13 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      avatarUrl: req.file?.path,
-    });
+  public async uploadAvatar(
+    { params, file }: Request<RequestUserParams>,
+    res: Response,
+  ) {
+    const { userId } = params;
+    const uploadDto: UpdateUserDto = { avatarUrl: file?.filename };
+    await this.userService.updateById(userId, uploadDto);
+    this.created(res, fillDTO(UploadUserAvatarRdo, uploadDto));
   }
 }

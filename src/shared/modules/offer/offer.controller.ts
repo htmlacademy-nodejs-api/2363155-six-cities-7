@@ -6,10 +6,11 @@ import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../models/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
-import { fillDTO } from '../../utils/service.js';
+import { fillDTO, parseOffersQuery } from '../../utils/service.js';
 import { OfferEndpoint } from './offer-endpoint.enum.js';
 import {
   CreateOfferRequest,
+  GetOffersRequest,
   RequestOfferParams,
   UpdateOfferRequest,
 } from './offer-request.type.js';
@@ -20,31 +21,26 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { createOfferDtoSchema } from './dto/create-offer.schema.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
-import { UserService } from '../user/user-service.interface.js';
 import { OfferReducedRdo } from './rdo/offer-reduced.rdo.js';
 import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
+import { HttpError } from '../../libs/rest/errors/http-error.js';
+import { StatusCodes } from 'http-status-codes';
+import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
+import { UploadFileMiddleware } from '../../libs/rest/middleware/upload-file.middelware.js';
+import { Config, ConfigSchema } from '../../libs/index.js';
+import { UploadMultipleFilesMiddleware } from '../../libs/rest/middleware/upload-multiple-files.middleware.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
+    @inject(Component.Config) protected readonly config: Config<ConfigSchema>,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.UserService) private readonly userService: UserService,
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
     const privateRouteMiddleware = new PrivateRouteMiddleware();
-    const validateUserIdMiddleware = new ValidateObjectIdMiddleware(
-      'userId',
-      'body',
-    );
     const validateOfferIdMiddleware = new ValidateObjectIdMiddleware('offerId');
-    const userExistsMiddleware = new DocumentExistsMiddleware(
-      this.userService,
-      'user',
-      'userId',
-      'body',
-    );
     const offerExistsMiddleware = new DocumentExistsMiddleware(
       this.offerService,
       'offer',
@@ -62,9 +58,7 @@ export class OfferController extends BaseController {
       handler: this.create,
       middlewares: [
         privateRouteMiddleware,
-        validateUserIdMiddleware,
         new ValidateDtoMiddleware(CreateOfferDto, createOfferDtoSchema),
-        userExistsMiddleware,
       ],
     });
     this.addRoute({
@@ -85,6 +79,31 @@ export class OfferController extends BaseController {
       ],
     });
     this.addRoute({
+      path: OfferEndpoint.UploadImages,
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        privateRouteMiddleware,
+        validateOfferIdMiddleware,
+        offerExistsMiddleware,
+        new UploadMultipleFilesMiddleware(
+          this.config.get('STATIC_DIR'),
+          'images',
+        ),
+      ],
+    });
+    this.addRoute({
+      path: OfferEndpoint.UploadPreviewUrl,
+      method: HttpMethod.Post,
+      handler: this.uploadPreviewUrl,
+      middlewares: [
+        privateRouteMiddleware,
+        validateOfferIdMiddleware,
+        offerExistsMiddleware,
+        new UploadFileMiddleware(this.config.get('STATIC_DIR'), 'previewUrl'),
+      ],
+    });
+    this.addRoute({
       path: OfferEndpoint.Offer,
       method: HttpMethod.Delete,
       handler: this.delete,
@@ -96,16 +115,20 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
-    const result = await this.offerService.find();
+  public async index(
+    { query: rawQuery }: GetOffersRequest,
+    res: Response,
+  ): Promise<void> {
+    const { filter, query } = parseOffersQuery(rawQuery);
+    const result = await this.offerService.find(filter, query);
     this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async create(
-    { body }: CreateOfferRequest,
+    { body, tokenPayload }: CreateOfferRequest,
     res: Response,
   ): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create(body, tokenPayload.id);
     this.created(res, fillDTO(OfferRdo, result));
   }
 
@@ -140,5 +163,38 @@ export class OfferController extends BaseController {
     await this.offerService.deleteById(offerId);
 
     this.noContent(res);
+  }
+
+  public async uploadImages(
+    { params, files }: Request<RequestOfferParams>,
+    res: Response,
+  ) {
+    if (!files) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No files provided');
+    }
+
+    const { offerId } = params;
+    const updateDto: UpdateOfferDto = {
+      images: Array.isArray(files)
+        ? files.map((el) => el.filename)
+        : files.images.map((el) => el.filename),
+    };
+
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
+  }
+
+  public async uploadPreviewUrl({ params, file }: Request, res: Response) {
+    if (!file) {
+      throw new HttpError(StatusCodes.BAD_REQUEST, 'No file provided');
+    }
+
+    const { offerId } = params;
+    const updateDto: UpdateOfferDto = {
+      previewUrl: file.filename,
+    };
+
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 }

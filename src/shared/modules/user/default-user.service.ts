@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../models/component.enum.js';
 import { OfferEntity } from '../offer/offer.entity.js';
+import { UpdateOfferDto } from '../offer/dto/update-offer.dto.js';
 
 @injectable()
 class DefaultUserService implements UserService {
@@ -50,6 +51,13 @@ class DefaultUserService implements UserService {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async updateById(
+    id: string,
+    dto: UpdateOfferDto,
+  ): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel.findByIdAndUpdate(id, dto, { new: true });
   }
 
   public async findFavorites(

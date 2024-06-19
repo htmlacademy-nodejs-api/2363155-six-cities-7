@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   description: Список ресурсов и маршрутов API «Шесть городов».
   contact:
-    name: Anatoly Dolgov
-    email: avylando@gmail.com
+    name: Vladimir Grankov
+    email: vladimirgrankov@yandex.ru
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
@@ -84,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/userTokenPayload'
 
         '401':
           description: Пользователь не авторизован.
@@ -246,6 +246,37 @@ paths:
       tags:
         - offers
       summary: Получение списка предложений.
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: number
+          example: 10
+
+        - name: offset
+          in: query
+          schema:
+            type: number
+          example: 0
+
+        - name: sort
+          in: query
+          schema:
+            type: number
+          example: -1
+
+        - name: city
+          in: query
+          schema:
+            type: string
+          example: Paris
+
+        - name: premium
+          in: query
+          schema:
+            type: boolean
+          example: true
+
       responses:
         '200':
           description: Список предложений.
@@ -441,6 +472,30 @@ components:
         type:
           type: string
           example: pro
+
+    userTokenPayload:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        email:
+          type: string
+          example: example@mail.ru
+
+        name:
+          type: string
+          example: Jane Doe
+
+        iat:
+          type: number
+          example: 1603180800
+
+        exp:
+          type: number
+          example: 1603184400
 
     createOffer:
       type: object

@@ -1,3 +1,10 @@
-const DEFAULT_OFFERS_LIMIT = 60;
+import { SortType } from '../../models/sort-type.enum.js';
 
-export { DEFAULT_OFFERS_LIMIT };
+const OffersDefault = {
+  LIMIT: 60,
+  PREMIUM_LIMIT: 3,
+  OFFSET: 0,
+  SORT: SortType.Down,
+} as const;
+
+export { OffersDefault };

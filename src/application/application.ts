@@ -1,5 +1,6 @@
 import { injectable, inject } from 'inversify';
 import express from 'express';
+import cors from 'cors';
 import type {
   Config,
   DBClient,
@@ -10,6 +11,7 @@ import type {
 } from '../shared/libs/index.js';
 import { Component } from '../shared/models/component.enum.js';
 import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
+import { STATIC_UPLOAD_ROUTE } from '../shared/constants/static.js';
 
 @injectable()
 class Application {
@@ -37,10 +39,18 @@ class Application {
     );
 
     this.server.use(express.json());
-    this.server.use('/upload', express.static(this.config.get('STATIC_DIR')));
+    this.server.use(
+      STATIC_UPLOAD_ROUTE,
+      express.static(this.config.get('STATIC_DIR')),
+    );
+    this.server.use(
+      this.config.get('STATIC_DIR'),
+      express.static(this.config.get('STATIC_DIR')),
+    );
     this.server.use(
       authenticateMiddleware.execute.bind(authenticateMiddleware),
     );
+    this.server.use(cors());
   }
 
   private async initControllers() {

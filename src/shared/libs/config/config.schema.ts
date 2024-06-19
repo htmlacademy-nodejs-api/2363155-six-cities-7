@@ -5,6 +5,7 @@ convict.addFormats(validator);
 
 interface ConfigSchema {
   PORT: number;
+  HOST: string;
   DB_HOST: string;
   DB_USER: string;
   DB_PASSWORD: string;
@@ -21,6 +22,12 @@ const configSchema = convict<ConfigSchema>({
     format: 'port',
     default: 3456,
     env: 'PORT',
+  },
+  HOST: {
+    doc: 'Server host',
+    format: 'ipaddress',
+    default: null,
+    env: 'HOST',
   },
   DB_HOST: {
     doc: 'IP address of the database server (MongoDB)',

@@ -9,7 +9,7 @@ import { Component } from '../../models/component.enum.js';
 import { OfferEntity } from '../offer/offer.entity.js';
 
 @injectable()
-export class DefaultUserService implements UserService {
+class DefaultUserService implements UserService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.UserModel)
@@ -54,41 +54,64 @@ export class DefaultUserService implements UserService {
 
   public async findFavorites(
     userId: string,
-  ): Promise<DocumentType<OfferEntity[]>> {
+  ): Promise<DocumentType<OfferEntity>[] | null> {
     const result = await this.userModel
-      .findById(userId)
-      .populate('favoriteOffers')
+      .findById<DocumentType<UserEntity>>(userId)
+      .populate<{
+        favoriteOffers: DocumentType<OfferEntity>[];
+      }>(['favoriteOffers'])
       .exec();
 
     if (!result) {
-      return [] as unknown as DocumentType<OfferEntity[]>;
+      return null;
     }
-    return result.favoriteOffers as unknown as DocumentType<OfferEntity[]>;
+
+    return result.favoriteOffers;
   }
 
   public async addOfferToFavorites(
     userId: string,
     offerId: string,
-  ): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel
-      .findByIdAndUpdate(
+  ): Promise<DocumentType<OfferEntity>[] | null> {
+    const result = await this.userModel
+      .findByIdAndUpdate<DocumentType<UserEntity>>(
         userId,
         { $addToSet: { favoriteOffers: offerId } },
         { new: true },
       )
+      .populate<{ favoriteOffers: DocumentType<OfferEntity>[] }>([
+        'favoriteOffers',
+      ])
       .exec();
+
+    if (!result) {
+      return null;
+    }
+
+    return result.favoriteOffers;
   }
 
   public async removeOfferFromFavorites(
     userId: string,
     offerId: string,
-  ): Promise<DocumentType<UserEntity> | null> {
-    return this.userModel
-      .findByIdAndUpdate(
+  ): Promise<DocumentType<OfferEntity>[] | null> {
+    const result = await this.userModel
+      .findByIdAndUpdate<DocumentType<UserEntity>>(
         userId,
         { $pull: { favoriteOffers: offerId } },
         { new: true },
       )
+      .populate<{ favoriteOffers: DocumentType<OfferEntity>[] }>([
+        'favoriteOffers',
+      ])
       .exec();
+
+    if (!result) {
+      return null;
+    }
+
+    return result.favoriteOffers;
   }
 }
+
+export { DefaultUserService };

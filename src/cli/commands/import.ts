@@ -19,7 +19,6 @@ const importCommand = program
     try {
       const env = getEnv<ConfigSchema>();
       const app = await configureApp();
-
       const reader = new TSVFileReader(pathname);
       const userService = new DefaultUserService(console, UserModel);
       const offerService = new DefaultOfferService(console, OfferModel);

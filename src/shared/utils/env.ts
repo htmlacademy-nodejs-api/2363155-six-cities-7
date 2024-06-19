@@ -7,7 +7,10 @@ const DEFAULT_ENVIRONMENT = 'development';
 const getEnv = <T extends object>() => {
   const mode = process.env.NODE_ENV || DEFAULT_ENVIRONMENT;
   const { parsed } = dotenv.config({
-    path: path.resolve(getCurrentModuleDirectoryPath(), `../../.env.${mode}`),
+    path: path.resolve(
+      getCurrentModuleDirectoryPath(),
+      `../../../.env.${mode}`,
+    ),
   });
 
   if (!parsed) {

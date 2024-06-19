@@ -30,6 +30,9 @@ import { addFavoriteOfferDtoSchema } from './dto/add-favorite-offer.schema.js';
 import { DocumentExistsMiddleware } from '../../libs/rest/middleware/document-exists.middleware.js';
 import { OfferService } from '../offer/offer-service.interface.js';
 import { OfferReducedRdo } from '../offer/rdo/offer-reduced.rdo.js';
+import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
+import { AuthService } from '../auth/auth-service.interface.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -37,6 +40,7 @@ export class UserController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.AuthService) private readonly authService: AuthService,
     @inject(Component.Config)
     private readonly configService: Config<ConfigSchema>,
   ) {
@@ -62,12 +66,14 @@ export class UserController extends BaseController {
       path: UserEndpoint.LogOut,
       method: HttpMethod.Post,
       handler: this.logout,
+      middlewares: [new PrivateRouteMiddleware()],
     });
     this.addRoute({
       path: UserEndpoint.UploadAvatar,
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
         new UploadFileMiddleware(
@@ -81,6 +87,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Get,
       handler: this.showFavorites,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
       ],
@@ -90,6 +97,7 @@ export class UserController extends BaseController {
       method: HttpMethod.Post,
       handler: this.addOfferToFavorites,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new ValidateObjectIdMiddleware('offerId', 'body'),
         new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
@@ -110,8 +118,16 @@ export class UserController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.removeOfferFromFavorites,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.userService, 'user', 'userId'),
+        new DocumentExistsMiddleware(
+          this.offerService,
+          'offer',
+          'offerId',
+          'params',
+        ),
       ],
     });
   }
@@ -138,17 +154,13 @@ export class UserController extends BaseController {
   }
 
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController',
-      );
-    }
-
-    this.ok(res, fillDTO(UserRdo, existsUser));
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, {
+      email: user.email,
+      token,
+    });
+    this.ok(res, responseData);
   }
 
   public async logout(_req: object, _res: Response): Promise<void> {
@@ -175,7 +187,7 @@ export class UserController extends BaseController {
       params.userId,
       body.offerId,
     );
-    this.ok(res, fillDTO(UserRdo, result));
+    this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async removeOfferFromFavorites(
@@ -186,7 +198,7 @@ export class UserController extends BaseController {
       params.userId,
       params.offerId,
     );
-    this.noContent(res, fillDTO(UserRdo, result));
+    this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async uploadAvatar(req: Request, res: Response) {

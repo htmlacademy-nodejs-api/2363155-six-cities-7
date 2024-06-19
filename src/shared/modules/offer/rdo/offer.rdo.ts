@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { Offer } from '../../../models/offer.interface.js';
+import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 class OfferRdo {
   @Expose()
@@ -41,8 +42,9 @@ class OfferRdo {
   @Expose()
   public features!: Offer['features'];
 
-  @Expose()
-  public userId!: string;
+  @Expose({ name: 'userId' })
+  @Type(() => UserRdo)
+  public author!: UserRdo;
 
   @Expose()
   public coordinates!: Offer['coordinates'];

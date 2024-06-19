@@ -22,6 +22,7 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
 import { UserService } from '../user/user-service.interface.js';
 import { OfferReducedRdo } from './rdo/offer-reduced.rdo.js';
+import { PrivateRouteMiddleware } from '../../libs/rest/middleware/private-route.middleware.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -32,6 +33,7 @@ export class OfferController extends BaseController {
   ) {
     super(logger);
     this.logger.info('Register routes for OfferController…');
+    const privateRouteMiddleware = new PrivateRouteMiddleware();
     const validateUserIdMiddleware = new ValidateObjectIdMiddleware(
       'userId',
       'body',
@@ -59,6 +61,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        privateRouteMiddleware,
         validateUserIdMiddleware,
         new ValidateDtoMiddleware(CreateOfferDto, createOfferDtoSchema),
         userExistsMiddleware,
@@ -75,6 +78,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Put,
       handler: this.update,
       middlewares: [
+        privateRouteMiddleware,
         validateOfferIdMiddleware,
         new ValidateDtoMiddleware(UpdateOfferDto, updateOfferDtoSchema),
         offerExistsMiddleware,
@@ -84,7 +88,11 @@ export class OfferController extends BaseController {
       path: OfferEndpoint.Offer,
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [validateOfferIdMiddleware, offerExistsMiddleware],
+      middlewares: [
+        privateRouteMiddleware,
+        validateOfferIdMiddleware,
+        offerExistsMiddleware,
+      ],
     });
   }
 
@@ -129,8 +137,8 @@ export class OfferController extends BaseController {
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const result = await this.offerService.deleteById(offerId);
+    await this.offerService.deleteById(offerId);
 
-    this.noContent(res, fillDTO(OfferRdo, result));
+    this.noContent(res);
   }
 }

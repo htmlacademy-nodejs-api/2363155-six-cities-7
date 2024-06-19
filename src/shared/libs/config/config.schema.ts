@@ -12,6 +12,7 @@ interface ConfigSchema {
   DB_NAME: string;
   SALT: string;
   STATIC_DIR: string;
+  JWT_SECRET: string;
 }
 
 const configSchema = convict<ConfigSchema>({
@@ -62,6 +63,12 @@ const configSchema = convict<ConfigSchema>({
     format: String,
     default: null,
     env: 'STATIC_DIR',
+  },
+  JWT_SECRET: {
+    doc: 'Secret for sign JWT',
+    format: String,
+    env: 'JWT_SECRET',
+    default: null,
   },
 });
 

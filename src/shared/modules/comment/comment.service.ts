@@ -9,7 +9,7 @@ import { Component } from '../../models/component.enum.js';
 import * as mongoose from 'mongoose';
 
 @injectable()
-export class DefaultCommentService implements CommentService {
+class DefaultCommentService implements CommentService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.CommentModel)
@@ -53,3 +53,5 @@ export class DefaultCommentService implements CommentService {
       .exec();
   }
 }
+
+export { DefaultCommentService };

@@ -1,6 +1,7 @@
 import {
   AppConfig,
   AppExceptionFilter,
+  AuthExceptionFilter,
   MongoDBClient,
 } from '../../shared/libs/index.js';
 import { Application } from '../../application/application.js';
@@ -13,6 +14,7 @@ import { OfferController } from '../../shared/modules/offer/offer.controller.js'
 import { CommentModel } from '../../shared/modules/comment/comment.entity.js';
 import { DefaultCommentService } from '../../shared/modules/comment/comment.service.js';
 import { CommentController } from '../../shared/modules/comment/comment.controller.js';
+import { DefaultAuthService } from '../../shared/modules/auth/auth.service.js';
 
 const configureApp = async () => {
   const logger = console;
@@ -20,10 +22,12 @@ const configureApp = async () => {
   const dbClient = new MongoDBClient(config, logger);
   const userService = new DefaultUserService(logger, UserModel);
   const offerService = new DefaultOfferService(logger, OfferModel);
+  const authService = new DefaultAuthService(logger, userService, config);
   const userController = new UserController(
     logger,
     userService,
     offerService,
+    authService,
     config,
   );
   const offerController = new OfferController(
@@ -37,12 +41,14 @@ const configureApp = async () => {
     commentService,
     offerService,
   );
+  const authExceptionFilter = new AuthExceptionFilter(logger);
   const exceptionFilter = new AppExceptionFilter(logger);
   const app = new Application(
     logger,
     config,
     dbClient,
     exceptionFilter,
+    authExceptionFilter,
     userController,
     offerController,
     commentController,

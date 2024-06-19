@@ -27,9 +27,6 @@ class OfferReducedRdo {
   public price!: OfferReduced['price'];
 
   @Expose()
-  public userId!: string;
-
-  @Expose()
   public rating!: OfferReduced['rating'];
 
   @Expose()

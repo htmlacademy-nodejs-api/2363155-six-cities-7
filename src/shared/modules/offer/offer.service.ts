@@ -12,7 +12,7 @@ import { SortType } from '../../models/sort-type.enum.js';
 import { City } from '../../models/offer.interface.js';
 
 @injectable()
-export class DefaultOfferService implements OfferService {
+class DefaultOfferService implements OfferService {
   constructor(
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.OfferModel)
@@ -24,20 +24,23 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.OfferModel.create(dto);
+    const result = await (
+      await this.OfferModel.create(dto)
+    ).populate(['userId']);
     this.logger.info(`New offer created: ${result._id}`);
 
     return result;
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.OfferModel.findById(id).populate('userId').exec();
+    return this.OfferModel.findById(id).populate(['userId']).exec();
   }
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
     return this.OfferModel.find()
       .limit(DEFAULT_OFFERS_LIMIT)
       .sort({ createdAt: SortType.Down })
+      .populate(['userId'])
       .exec();
   }
 
@@ -56,6 +59,7 @@ export class DefaultOfferService implements OfferService {
     return this.OfferModel.find({ city, premium: true })
       .limit(DEFAULT_OFFERS_LIMIT)
       .sort({ createdAt: SortType.Down })
+      .populate(['userId'])
       .exec();
   }
 
@@ -111,3 +115,5 @@ export class DefaultOfferService implements OfferService {
     ).exec();
   }
 }
+
+export { DefaultOfferService };

@@ -1,5 +1,5 @@
-import { AppConfig, MongoDBClient } from '../shared/libs/index.js';
-import { Application } from '../application/application.js';
+import { AppConfig, MongoDBClient } from '../../shared/libs/index.js';
+import { Application } from '../../application/application.js';
 
 const configureApp = async () => {
   const logger = console;

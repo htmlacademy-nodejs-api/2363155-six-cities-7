@@ -3,8 +3,7 @@ import 'reflect-metadata';
 import { readFile } from 'node:fs/promises';
 import { Command } from 'commander';
 import { getPackageJsonPath } from '../utils/index.js';
-import { importCommand } from './commands/import.js';
-import { generateCommand } from './commands/generate.js';
+import { importCommand, generateCommand } from './commands/index.js';
 
 const packageUrl = getPackageJsonPath();
 const packageJsonContent = JSON.parse(await readFile(packageUrl, 'utf-8'));

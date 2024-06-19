@@ -1,5 +1,9 @@
+.\/dist/main.cli.js --help   Windows
 
+ пакеты mongoose, @typegoose/typegoose
 
+ VSCode расширения для работы с OpenAPI: openapi-lint и OpenAPI (Swagger) Editor.
+ 
 # В вашей локальной копии переключитесь в ветку master
 git checkout master
 # Заберите изменения из репозитория Академии¹ (или academy)

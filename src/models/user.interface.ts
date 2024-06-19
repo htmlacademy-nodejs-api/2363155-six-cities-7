@@ -1,11 +1,14 @@
-type UserType = 'plain' | 'pro';
-
+enum UserType {
+  Plain = 'plain',
+  Pro = 'pro',
+}
 interface User {
   name: string;
   email: string;
   avatarUrl: string;
-  password: string;
   type: UserType;
+  password?: string;
 }
 
-export type { User, UserType };
+export type { User };
+export { UserType };

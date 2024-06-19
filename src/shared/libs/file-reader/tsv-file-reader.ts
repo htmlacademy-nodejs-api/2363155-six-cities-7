@@ -7,7 +7,7 @@ import {
   Offer,
   User,
   UserType,
-} from '../../models/index.js';
+} from '../../../models/index.js';
 import EventEmitter from 'node:events';
 
 const DECIMAL_RADIX = 10;
@@ -37,9 +37,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       price,
       features,
       authorName,
+      password,
       authorEmail,
       avatarUrl,
-      password,
       userType,
       latitude,
       longitude,
@@ -49,7 +49,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return {
       name,
       description,
-      date,
+      createdAt: new Date(date),
       city: city as City,
       previewUrl,
       images: this.parseStringArray<string>(images),
@@ -65,11 +65,12 @@ export class TSVFileReader extends EventEmitter implements FileReader {
         authorName,
         authorEmail,
         avatarUrl,
-        password,
         userType as UserType,
+        password,
       ),
-      commentsAmount:
-        Number(commentsAmount) && this.parseInteger(commentsAmount),
+      commentsAmount: commentsAmount
+        ? this.parseInteger(commentsAmount)
+        : undefined,
       coordinates: {
         lat: this.parseFloat(latitude),
         lng: this.parseFloat(longitude),
@@ -101,10 +102,10 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     name: User['name'],
     email: User['email'],
     avatarUrl: User['avatarUrl'],
-    password: User['password'],
     type: User['type'],
+    password: User['password'],
   ): User {
-    return { name, email, avatarUrl, password, type };
+    return { name, email, avatarUrl, type, password };
   }
 
   public async read(): Promise<void> {
@@ -117,9 +118,9 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     let lineBreakPosition = -1;
     let linesCount = 0;
 
-    readStream.on('readable', () => {
+    readStream.on('readable', async () => {
       let chunk = readStream.read(this.CHUNK_SIZE);
-      while (null !== chunk) {
+      while (chunk !== null) {
         data += chunk;
 
         while ((lineBreakPosition = data.indexOf('\n')) >= 0) {

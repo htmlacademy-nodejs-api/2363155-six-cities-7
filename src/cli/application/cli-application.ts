@@ -10,6 +10,9 @@ import { UserModel } from '../../shared/modules/user/user.entity.js';
 import { DefaultOfferService } from '../../shared/modules/offer/offer.service.js';
 import { OfferModel } from '../../shared/modules/offer/offer.entity.js';
 import { OfferController } from '../../shared/modules/offer/offer.controller.js';
+import { CommentModel } from '../../shared/modules/comment/comment.entity.js';
+import { DefaultCommentService } from '../../shared/modules/comment/comment.service.js';
+import { CommentController } from '../../shared/modules/comment/comment.controller.js';
 
 const configureApp = async () => {
   const logger = console;
@@ -18,7 +21,17 @@ const configureApp = async () => {
   const userService = new DefaultUserService(logger, UserModel);
   const userController = new UserController(logger, userService, config);
   const offerService = new DefaultOfferService(logger, OfferModel);
-  const offerController = new OfferController(logger, offerService);
+  const offerController = new OfferController(
+    logger,
+    offerService,
+    userService,
+  );
+  const commentService = new DefaultCommentService(logger, CommentModel);
+  const commentController = new CommentController(
+    logger,
+    commentService,
+    offerService,
+  );
   const exceptionFilter = new AppExceptionFilter(logger);
   const app = new Application(
     logger,
@@ -27,6 +40,7 @@ const configureApp = async () => {
     exceptionFilter,
     userController,
     offerController,
+    commentController,
   );
   await app.init();
   return app;

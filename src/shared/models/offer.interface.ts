@@ -9,7 +9,12 @@ enum City {
   Dusseldorf = 'Dusseldorf',
 }
 
-type Housing = 'apartment' | 'house' | 'room' | 'hotel';
+enum Housing {
+  Apartment = 'apartment',
+  House = 'house',
+  Room = 'room',
+  Hotel = 'hotel',
+}
 
 enum Feature {
   Breakfast = 'Breakfast',
@@ -45,5 +50,5 @@ interface Offer {
   coordinates: Coordinates;
 }
 
-export type { Offer, Coordinates, Housing };
-export { City, Feature };
+export type { Offer, Coordinates };
+export { City, Feature, Housing };

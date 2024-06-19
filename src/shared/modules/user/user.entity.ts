@@ -7,13 +7,14 @@ import {
 
 import { User, UserType } from '../../models/index.js';
 import { createSHA256 } from '../../utils/hash.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'users',
+    collection: DocumentCollection.Users,
     timestamps: true,
   },
 })

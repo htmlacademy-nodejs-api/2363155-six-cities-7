@@ -12,6 +12,7 @@ import {
   MongoDBClient,
 } from '../shared/libs/index.js';
 import { Application } from './application.js';
+import { PathTransformer } from '../shared/libs/rest/transform/path-transformer.js';
 
 const createApplicationContainer = () => {
   const container = new Container();
@@ -31,6 +32,10 @@ const createApplicationContainer = () => {
   container
     .bind<ExceptionFilter>(Component.ExceptionFilter)
     .to(AppExceptionFilter)
+    .inSingletonScope();
+  container
+    .bind<PathTransformer>(Component.PathTransformer)
+    .to(PathTransformer)
     .inSingletonScope();
 
   return container;

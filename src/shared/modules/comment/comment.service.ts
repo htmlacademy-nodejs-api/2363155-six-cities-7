@@ -19,10 +19,12 @@ class DefaultCommentService implements CommentService {
   public async create(
     dto: CreateCommentDto,
     offerId: string,
+    userId: string,
   ): Promise<DocumentType<CommentEntity>> {
     const Comment = new CommentEntity(
       dto,
       offerId as unknown as mongoose.Types.ObjectId,
+      userId as unknown as mongoose.Types.ObjectId,
     );
 
     const result = await this.CommentModel.create(Comment);

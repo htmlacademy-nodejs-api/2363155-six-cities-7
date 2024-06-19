@@ -1,3 +1,5 @@
+пакет cors
+
 пакет jose
 
 multer, mime-types, nanoid

@@ -1,17 +1,29 @@
 import { DocumentType } from '@typegoose/typegoose';
 
-import type { OfferEntity } from './offer.entity.js';
+import { OfferEntity } from './offer.entity.js';
 import type { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { City } from '../../models/offer.interface.js';
 import { DocumentExists } from '../../models/document-exists.interface.js';
+import { SortType } from '../../models/sort-type.enum.js';
 
-export interface OfferService extends DocumentExists {
-  create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
+type OffersFindQueryParams = Partial<{
+  limit: number;
+  offset: number;
+  sort: SortType;
+}>;
+
+type OffersFindFilterParams = Partial<Pick<OfferEntity, 'city' | 'premium'>>;
+
+interface OfferService extends DocumentExists {
+  create(
+    dto: CreateOfferDto,
+    userId: string,
+  ): Promise<DocumentType<OfferEntity>>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  find(): Promise<DocumentType<OfferEntity>[]>;
-  findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>;
-  findPremiumsInCity(city: City): Promise<DocumentType<OfferEntity>[]>;
+  find(
+    filter?: OffersFindFilterParams,
+    query?: OffersFindQueryParams,
+  ): Promise<DocumentType<OfferEntity>[]>;
   updateById(
     offerId: string,
     dto: UpdateOfferDto,
@@ -24,3 +36,5 @@ export interface OfferService extends DocumentExists {
     rating: number,
   ): Promise<DocumentType<OfferEntity> | null>;
 }
+
+export type { OfferService, OffersFindQueryParams, OffersFindFilterParams };

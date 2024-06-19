@@ -30,10 +30,6 @@ class CommentController extends BaseController {
     this.logger.info('Register routes for CommentController…');
     const privateRouteMiddleware = new PrivateRouteMiddleware();
     const validateOfferIdMiddleware = new ValidateObjectIdMiddleware('offerId');
-    const validateUserIdMiddleware = new ValidateObjectIdMiddleware(
-      'userId',
-      'body',
-    );
     const offerExistsMiddleware = new DocumentExistsMiddleware(
       this.offerService,
       'offer',
@@ -52,7 +48,6 @@ class CommentController extends BaseController {
       middlewares: [
         privateRouteMiddleware,
         validateOfferIdMiddleware,
-        validateUserIdMiddleware,
         new ValidateDtoMiddleware(CreateCommentDto, createCommentDtoSchema),
         offerExistsMiddleware,
       ],
@@ -68,10 +63,14 @@ class CommentController extends BaseController {
   }
 
   public async create(
-    { body, params }: CreateCommentRequest,
+    { body, params, tokenPayload }: CreateCommentRequest,
     res: Response,
   ): Promise<void> {
-    const result = await this.commentService.create(body, params.offerId);
+    const result = await this.commentService.create(
+      body,
+      params.offerId,
+      tokenPayload.id,
+    );
     await this.offerService.incCommentsAmount(params.offerId);
     this.created(res, fillDTO(CommentRdo, result));
   }

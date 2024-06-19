@@ -1,15 +1,17 @@
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
 
-import { OfferService } from './offer-service.interface.js';
+import {
+  OfferService,
+  OffersFindFilterParams,
+  OffersFindQueryParams,
+} from './offer-service.interface.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { Logger } from '../../libs/index.js';
 import { Component } from '../../models/component.enum.js';
-import { DEFAULT_OFFERS_LIMIT } from './offer.constants.js';
+import { OffersDefault } from './offer.constants.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { SortType } from '../../models/sort-type.enum.js';
-import { City } from '../../models/offer.interface.js';
 
 @injectable()
 class DefaultOfferService implements OfferService {
@@ -23,9 +25,12 @@ class DefaultOfferService implements OfferService {
     return (await this.OfferModel.exists({ _id: id })) !== null;
   }
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
+  public async create(
+    dto: CreateOfferDto,
+    userId: string,
+  ): Promise<DocumentType<OfferEntity>> {
     const result = await (
-      await this.OfferModel.create(dto)
+      await this.OfferModel.create({ ...dto, userId })
     ).populate(['userId']);
     this.logger.info(`New offer created: ${result._id}`);
 
@@ -36,29 +41,18 @@ class DefaultOfferService implements OfferService {
     return this.OfferModel.findById(id).populate(['userId']).exec();
   }
 
-  public async find(): Promise<DocumentType<OfferEntity>[]> {
-    return this.OfferModel.find()
-      .limit(DEFAULT_OFFERS_LIMIT)
-      .sort({ createdAt: SortType.Down })
-      .populate(['userId'])
-      .exec();
-  }
-
-  public async findFavorites(
-    userId: string,
+  public async find(
+    filterParams: OffersFindFilterParams = {},
+    {
+      limit = OffersDefault.LIMIT,
+      offset = OffersDefault.OFFSET,
+      sort = OffersDefault.SORT,
+    }: OffersFindQueryParams = {},
   ): Promise<DocumentType<OfferEntity>[]> {
-    return this.OfferModel.find({ usersFavorite: userId })
-      .limit(DEFAULT_OFFERS_LIMIT)
-      .sort({ createdAt: SortType.Down })
-      .exec();
-  }
-
-  public async findPremiumsInCity(
-    city: City,
-  ): Promise<DocumentType<OfferEntity>[]> {
-    return this.OfferModel.find({ city, premium: true })
-      .limit(DEFAULT_OFFERS_LIMIT)
-      .sort({ createdAt: SortType.Down })
+    return this.OfferModel.find(filterParams)
+      .limit(filterParams.premium ? OffersDefault.PREMIUM_LIMIT : limit)
+      .skip(offset)
+      .sort({ createdAt: sort })
       .populate(['userId'])
       .exec();
   }

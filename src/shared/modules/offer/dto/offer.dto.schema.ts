@@ -11,9 +11,13 @@ import {
   Price,
   Rooms,
 } from '../../../constants/offer.js';
+import { UpdateOfferDto } from './update-offer.dto.js';
 
 const offerDtoSchemaObject: Joi.ObjectPropertiesSchema<
-  Omit<InstanceType<typeof CreateOfferDto>, 'userId'>
+  Omit<
+    InstanceType<typeof CreateOfferDto> & InstanceType<typeof UpdateOfferDto>,
+    'userId'
+  >
 > = {
   name: Joi.string()
     .ruleset.min(NameLength.MIN)

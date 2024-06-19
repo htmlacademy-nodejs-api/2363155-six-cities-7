@@ -13,7 +13,6 @@ const createCommentDtoSchema: Joi.Schema<
     .rule({
       message: `Comment length must be between ${CommentLength.MIN} and ${CommentLength.MAX} characters`,
     }),
-  userId: Joi.string().required(),
 });
 
 export { createCommentDtoSchema };

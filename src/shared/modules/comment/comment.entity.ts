@@ -45,12 +45,16 @@ export class CommentEntity extends defaultClasses.TimeStamps {
     return calculateAggregateRating(this.usersRatings);
   }
 
-  constructor(dto: CreateCommentDto, offerId: mongoose.Types.ObjectId) {
+  constructor(
+    dto: CreateCommentDto,
+    offerId: mongoose.Types.ObjectId,
+    userId: mongoose.Types.ObjectId,
+  ) {
     super();
 
     this.text = dto.text;
     this.offerId = offerId;
-    this.userId = dto.userId;
+    this.userId = userId;
   }
 }
 

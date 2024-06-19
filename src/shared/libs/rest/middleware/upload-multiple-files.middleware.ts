@@ -5,9 +5,10 @@ import { nanoid } from 'nanoid';
 
 import { Middleware } from './middleware.interface.js';
 import { HttpError } from '../errors/http-error.js';
+import { OFFER_IMAGES_AMOUNT } from '../../../constants/offer.js';
 import { checkFileMimeType } from '../../../utils/service.js';
 
-class UploadFileMiddleware implements Middleware {
+class UploadMultipleFilesMiddleware implements Middleware {
   constructor(
     private uploadDirectory: string,
     private fieldName: string,
@@ -27,7 +28,7 @@ class UploadFileMiddleware implements Middleware {
       },
     });
 
-    const uploadSingleFileMiddleware = multer({
+    const uploadMultipleFilesMiddleware = multer({
       storage,
       fileFilter: (_req, file, cb) => {
         try {
@@ -38,10 +39,10 @@ class UploadFileMiddleware implements Middleware {
           return cb(err);
         }
       },
-    }).single(this.fieldName);
+    }).array(this.fieldName, OFFER_IMAGES_AMOUNT);
 
-    uploadSingleFileMiddleware(req, res, next);
+    uploadMultipleFilesMiddleware(req, res, next);
   }
 }
 
-export { UploadFileMiddleware };
+export { UploadMultipleFilesMiddleware };

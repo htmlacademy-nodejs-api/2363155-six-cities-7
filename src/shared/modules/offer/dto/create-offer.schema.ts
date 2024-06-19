@@ -4,10 +4,6 @@ import { offerDtoSchemaObject } from './offer.dto.schema.js';
 
 const createOfferDtoSchema = Joi.object<InstanceType<typeof CreateOfferDto>>(
   offerDtoSchemaObject,
-)
-  .fork(Object.keys(offerDtoSchemaObject), (schema) => schema.required())
-  .keys({
-    userId: Joi.string().required(),
-  });
+).fork(Object.keys(offerDtoSchemaObject), (schema) => schema.required());
 
 export { createOfferDtoSchema };

@@ -33,10 +33,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public name!: CreateOfferDto['name'];
 
   @prop({ type: String, required: true, trim: true })
-  public previewUrl!: CreateOfferDto['previewUrl'];
+  public previewUrl!: string;
 
   @prop({ type: Array, required: true, default: [] })
-  public images!: CreateOfferDto['images'];
+  public images!: string[];
 
   @prop({ type: Number, required: true })
   public rooms!: CreateOfferDto['rooms'];

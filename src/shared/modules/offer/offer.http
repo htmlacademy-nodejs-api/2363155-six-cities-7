@@ -14,7 +14,7 @@ Content-Type: application/json
 {
   "name": "Предложение 1",
   "description": "Описание предложения 1",
-  "price": 1000,
+  "price": 100,
   "city": "Paris",
   "housing": "apartment",
   "rooms": 2,
@@ -26,14 +26,19 @@ Content-Type: application/json
     "Towels",
     "Fridge"
   ],
+  "premium": false,
   "images": [
     "https://example.com/image1.jpg",
-    "https://example.com/image2.jpg"
+    "https://example.com/image2.jpg",
+    "https://example.com/image3.jpg",
+    "https://example.com/image4.jpg",
+    "https://example.com/image5.jpg",
+    "https://example.com/image6.jpg"
   ],
-  "userId": "6652339b811be39a7a8ed1f2",
+  "userId": "66550aad457a102e37cba005",
   "coordinates": {
-    "latitude": 55.7558,
-    "longitude": 37.6176
+    "lat": 55.7558,
+    "lng": 37.6176
   }
 }
 

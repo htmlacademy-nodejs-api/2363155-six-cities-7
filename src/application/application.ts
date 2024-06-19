@@ -24,6 +24,8 @@ class Application {
     private readonly userController: Controller,
     @inject(Component.OfferController)
     private readonly offerController: Controller,
+    @inject(Component.CommentController)
+    private readonly commentController: Controller,
   ) {}
 
   private async initServerMiddleware() {
@@ -33,6 +35,7 @@ class Application {
   private async initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
+    this.server.use('/offers/:offerId/comments', this.commentController.router);
   }
 
   private async initExceptionFilters() {

@@ -13,7 +13,7 @@ export abstract class BaseController implements Controller {
   private readonly _router: Router;
 
   constructor(protected readonly logger: Logger) {
-    this._router = Router();
+    this._router = Router({ mergeParams: true });
   }
 
   get router() {
@@ -22,7 +22,13 @@ export abstract class BaseController implements Controller {
 
   public addRoute(route: Route) {
     const wrapperAsyncHandler = asyncHandler(route.handler.bind(this));
-    this._router[route.method](route.path, wrapperAsyncHandler);
+    const handlers = [];
+    route.middlewares?.forEach((middleware) => {
+      handlers.push(asyncHandler(middleware.execute.bind(middleware)));
+    });
+    handlers.push(wrapperAsyncHandler);
+    this._router[route.method](route.path, handlers);
+
     this.logger.info(
       `Route registered: ${route.method.toUpperCase()} ${route.path}`,
     );

@@ -8,40 +8,16 @@ import {
   getRandomBoolean,
   getRandomFloatInRange,
 } from '../../utils/index.js';
-
-const Price = {
-  MIN: 100,
-  MAX: 100000,
-};
-
-const Rate = {
-  MIN: 1,
-  MAX: 5,
-};
-
-const Rooms = {
-  MIN: 1,
-  MAX: 8,
-};
-
-const Guests = {
-  MIN: 1,
-  MAX: 10,
-};
-
-const Latitude = {
-  MIN: -90,
-  MAX: 90,
-};
-
-const Longitude = {
-  MIN: -180,
-  MAX: 180,
-};
-
-const COORDINATES_FRACTION_DIGITS = 6;
-
-const OFFER_IMAGES_AMOUNT = 6;
+import {
+  COORDINATES_FRACTION_DIGITS,
+  Guests,
+  Latitude,
+  Longitude,
+  OFFER_IMAGES_AMOUNT,
+  Price,
+  Rate,
+  Rooms,
+} from '../../constants/offer.js';
 
 const ARRAY_DELIMITER = ';';
 const USER_TYPES: UserType[] = [UserType.Plain, UserType.Pro];

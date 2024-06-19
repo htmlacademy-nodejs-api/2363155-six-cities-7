@@ -1,3 +1,5 @@
+class-validator joi
+
 http-status-codes. Пакет предоставляет перечисление со всеми HTTP-кодами.
 express, @types/express. Фреймворк Express и декларации типов.
 class-transformer. Пакет поможет конвертировать объекты в DTO.

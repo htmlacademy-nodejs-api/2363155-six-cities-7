@@ -19,6 +19,10 @@ export class DefaultOfferService implements OfferService {
     private readonly OfferModel: types.ModelType<OfferEntity>,
   ) {}
 
+  public async exists(id: string): Promise<boolean> {
+    return (await this.OfferModel.exists({ _id: id })) !== null;
+  }
+
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const Offer = new OfferEntity(dto);
 

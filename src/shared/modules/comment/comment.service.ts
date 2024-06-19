@@ -6,6 +6,7 @@ import { CommentEntity } from './comment.entity.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { Logger } from '../../libs/index.js';
 import { Component } from '../../models/component.enum.js';
+import * as mongoose from 'mongoose';
 
 @injectable()
 export class DefaultCommentService implements CommentService {
@@ -17,10 +18,15 @@ export class DefaultCommentService implements CommentService {
 
   public async create(
     dto: CreateCommentDto,
+    offerId: string,
   ): Promise<DocumentType<CommentEntity>> {
-    const Comment = new CommentEntity(dto);
+    const Comment = new CommentEntity(
+      dto,
+      offerId as unknown as mongoose.Types.ObjectId,
+    );
 
     const result = await this.CommentModel.create(Comment);
+    result.populate('userId');
     this.logger.info(`New comment created: ${result._id}`);
 
     return result;
@@ -29,7 +35,7 @@ export class DefaultCommentService implements CommentService {
   public async findByOfferId(
     offerId: string,
   ): Promise<DocumentType<CommentEntity>[]> {
-    return this.CommentModel.find({ offerId }).exec();
+    return this.CommentModel.find({ offerId }).populate(['userId']).exec();
   }
 
   public async updateRating(
@@ -42,6 +48,8 @@ export class DefaultCommentService implements CommentService {
         $push: { usersRatings: rating },
       },
       { new: true },
-    ).exec();
+    )
+      .populate(['userId'])
+      .exec();
   }
 }

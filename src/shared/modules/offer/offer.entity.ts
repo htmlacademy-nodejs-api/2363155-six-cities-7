@@ -8,13 +8,14 @@ import { City } from '../../models/index.js';
 import { UserEntity } from '../user/user.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { calculateAggregateRating } from '../../utils/rating.js';
+import { DocumentCollection } from '../../libs/rest/types/document-collection.enum.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'offers',
+    collection: DocumentCollection.Offers,
     timestamps: true,
     virtuals: true,
     overwriteModels: true,

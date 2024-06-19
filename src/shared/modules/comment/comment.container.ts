@@ -4,6 +4,8 @@ import { CommentService } from './comment-service.interface.js';
 import { Component } from '../../models/component.enum.js';
 import { DefaultCommentService } from './comment.service.js';
 import { CommentEntity, CommentModel } from './comment.entity.js';
+import { Controller } from '../../libs/index.js';
+import { CommentController } from './comment.controller.js';
 
 const createCommentContainer = () => {
   const commentContainer = new Container();
@@ -15,6 +17,11 @@ const createCommentContainer = () => {
   commentContainer
     .bind<types.ModelType<CommentEntity>>(Component.CommentModel)
     .toConstantValue(CommentModel);
+
+  commentContainer
+    .bind<Controller>(Component.CommentController)
+    .to(CommentController)
+    .inSingletonScope();
 
   return commentContainer;
 };

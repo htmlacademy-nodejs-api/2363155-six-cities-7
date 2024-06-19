@@ -1,4 +1,4 @@
-import { Offer } from '../../../../models/offer.interface.js';
+import { Offer } from '../../../models/offer.interface.js';
 
 class UpdateOfferDto {
   public name?: Offer['name'];

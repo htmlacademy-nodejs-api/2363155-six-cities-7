@@ -1,11 +1,13 @@
 import { Container } from 'inversify';
-import { Component } from '../models/component.enum.js';
+import { Component } from '../shared/models/component.enum.js';
 import {
   AppConfig,
+  AppExceptionFilter,
   AppLogger,
   Config,
   ConfigSchema,
   DBClient,
+  ExceptionFilter,
   Logger,
   MongoDBClient,
 } from '../shared/libs/index.js';
@@ -25,6 +27,10 @@ const createApplicationContainer = () => {
   container
     .bind<DBClient>(Component.DBClient)
     .to(MongoDBClient)
+    .inSingletonScope();
+  container
+    .bind<ExceptionFilter>(Component.ExceptionFilter)
+    .to(AppExceptionFilter)
     .inSingletonScope();
 
   return container;

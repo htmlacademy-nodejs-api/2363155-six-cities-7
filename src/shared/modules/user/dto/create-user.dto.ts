@@ -1,4 +1,4 @@
-import { User } from '../../../../models/user.interface.js';
+import { User } from '../../../models/user.interface.js';
 
 class CreateUserDto {
   public email!: User['email'];

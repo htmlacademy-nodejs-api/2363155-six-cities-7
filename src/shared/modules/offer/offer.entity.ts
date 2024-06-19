@@ -4,10 +4,10 @@ import {
   prop,
   modelOptions,
 } from '@typegoose/typegoose';
-import { City } from '../../../models/index.js';
+import { City } from '../../models/index.js';
 import { UserEntity } from '../user/user.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
-import { calculateAggregateRating } from '../../../utils/rating.js';
+import { calculateAggregateRating } from '../../utils/rating.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}

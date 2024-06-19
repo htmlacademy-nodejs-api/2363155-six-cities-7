@@ -5,7 +5,7 @@ import { CommentService } from './comment-service.interface.js';
 import { CommentEntity } from './comment.entity.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { Logger } from '../../libs/index.js';
-import { Component } from '../../../models/component.enum.js';
+import { Component } from '../../models/component.enum.js';
 
 @injectable()
 export class DefaultCommentService implements CommentService {

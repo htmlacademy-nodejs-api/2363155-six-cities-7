@@ -1,3 +1,4 @@
+nodemon.json
 .\/dist/main.cli.js --help   Windows
 
  пакеты mongoose, @typegoose/typegoose

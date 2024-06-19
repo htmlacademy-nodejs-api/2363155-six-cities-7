@@ -2,7 +2,7 @@ import { User } from './user.interface.js';
 
 interface Comment {
   text: string;
-  date: string;
+  createdAt: Date;
   rating: number;
   author: User;
 }

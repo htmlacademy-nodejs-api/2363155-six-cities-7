@@ -101,6 +101,134 @@ paths:
         '401':
           description: Пользователь не авторизован.
 
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Загрузка аватара пользователя.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            encoding:
+              avatar:
+                contentType: image/jpeg, image/png
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+
+      responses:
+        '201':
+          description: Аватар загружен. Путь к файлу.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatarUrl:
+                    type: string
+                    example: https://example.com/avatar.jpg
+
+        '404':
+          description: Пользователь не найден.
+
+        '415':
+          description: Некорректный формат файла.
+
+  /users/{userId}/favorites:
+    get:
+      tags:
+        - users
+      summary: Получение списка избранных предложений пользователя.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '200':
+          description: Список избранных предложений.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerReduced'
+
+        '404':
+          description: Пользователь не найден.
+
+    post:
+      tags:
+        - users
+      summary: Добавление предложения в избранное.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offerId:
+                  type: string
+                  example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '200':
+          description: Предложение добавлено в избранное.
+
+        '404':
+          description: Пользователь или предложение не найдены.
+
+  /users/{userId}/favorites/{offerId}:
+    delete:
+      tags:
+        - users
+      summary: Удаление предложения из избранного.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+      responses:
+        '204':
+          description: Предложение удалено из избранного.
+
+        '404':
+          description: Пользователь или предложение не найдены.
+
   /offers:
     get:
       tags:
@@ -114,7 +242,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/offer'
+                  $ref: '#/components/schemas/offerReduced'
 
     post:
       tags:
@@ -442,6 +570,54 @@ components:
         createdAt:
           type: string
           example: 2020-10-20T08:00:00.000Z
+
+    offerReduced:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 5f8f1f2b5b3e2b001f3b3b3b
+
+        name:
+          type: string
+          example: Продам квартиру
+
+        price:
+          type: number
+          example: 100000
+
+        previewUrl:
+          type: string
+          example: https://example.com/preview.jpg
+
+        rating:
+          type: number
+          example: 4.5
+
+        city:
+          type: string
+          example: Paris
+
+        housing:
+          type: string
+          example: apartment
+
+        commentsAmount:
+          type: number
+          example: 5
+
+        createdAt:
+          type: string
+          example: 2020-10-20T08:00:00.000Z
+
+        premium:
+          type: boolean
+          example: true
+
+        favorite:
+          type: boolean
+          example: false
 
     createComment:
       type: object

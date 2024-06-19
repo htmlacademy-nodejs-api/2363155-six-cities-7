@@ -11,6 +11,7 @@ interface ConfigSchema {
   DB_PORT: number;
   DB_NAME: string;
   SALT: string;
+  STATIC_DIR: string;
 }
 
 const configSchema = convict<ConfigSchema>({
@@ -55,6 +56,12 @@ const configSchema = convict<ConfigSchema>({
     format: String,
     default: null,
     env: 'SALT',
+  },
+  STATIC_DIR: {
+    doc: 'Path to static files, uploaded by users',
+    format: String,
+    default: null,
+    env: 'STATIC_DIR',
   },
 });
 

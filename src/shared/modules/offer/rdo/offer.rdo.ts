@@ -24,6 +24,9 @@ class OfferRdo {
   public premium!: Offer['premium'];
 
   @Expose()
+  public favourite!: Offer['favorite'];
+
+  @Expose()
   public housing!: Offer['housing'];
 
   @Expose()
@@ -43,6 +46,15 @@ class OfferRdo {
 
   @Expose()
   public coordinates!: Offer['coordinates'];
+
+  @Expose()
+  public rating!: Offer['rating'];
+
+  @Expose()
+  public commentsAmount!: Offer['commentsAmount'];
+
+  @Expose()
+  public createdAt!: Offer['createdAt'];
 }
 
 export { OfferRdo };

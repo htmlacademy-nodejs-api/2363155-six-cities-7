@@ -21,6 +21,7 @@ import { createOfferDtoSchema } from './dto/create-offer.schema.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { updateOfferDtoSchema } from './dto/update-offer.schema.js';
 import { UserService } from '../user/user-service.interface.js';
+import { OfferReducedRdo } from './rdo/offer-reduced.rdo.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -89,7 +90,7 @@ export class OfferController extends BaseController {
 
   public async index(_req: Request, res: Response): Promise<void> {
     const result = await this.offerService.find();
-    this.ok(res, fillDTO(OfferRdo, result));
+    this.ok(res, fillDTO(OfferReducedRdo, result));
   }
 
   public async create(

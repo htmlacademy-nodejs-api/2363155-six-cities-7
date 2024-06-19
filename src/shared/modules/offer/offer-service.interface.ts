@@ -19,14 +19,6 @@ export interface OfferService extends DocumentExists {
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   incCommentsAmount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   decCommentsAmount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  addToFavorites(
-    offerId: string,
-    userId: string,
-  ): Promise<DocumentType<OfferEntity> | null>;
-  removeFromFavorites(
-    offerId: string,
-    userId: string,
-  ): Promise<DocumentType<OfferEntity> | null>;
   updateRating(
     offerId: string,
     rating: number,

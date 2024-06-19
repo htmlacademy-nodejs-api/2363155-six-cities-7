@@ -30,6 +30,7 @@ class Application {
 
   private async initServerMiddleware() {
     this.server.use(express.json());
+    this.server.use('/upload', express.static(this.config.get('STATIC_DIR')));
   }
 
   private async initControllers() {

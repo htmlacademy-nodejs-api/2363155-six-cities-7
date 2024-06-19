@@ -1,3 +1,6 @@
+
+multer, mime-types, nanoid
+
 class-validator joi
 
 http-status-codes. Пакет предоставляет перечисление со всеми HTTP-кодами.

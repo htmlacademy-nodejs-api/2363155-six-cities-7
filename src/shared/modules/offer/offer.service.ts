@@ -24,16 +24,14 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const Offer = new OfferEntity(dto);
-
-    const result = await this.OfferModel.create(Offer);
+    const result = await this.OfferModel.create(dto);
     this.logger.info(`New offer created: ${result._id}`);
 
     return result;
   }
 
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.OfferModel.findById(id).populate(['userId']).exec();
+    return this.OfferModel.findById(id).populate('userId').exec();
   }
 
   public async find(): Promise<DocumentType<OfferEntity>[]> {
@@ -96,28 +94,6 @@ export class DefaultOfferService implements OfferService {
       {
         $inc: { commentsAmount: -1 },
       },
-      { new: true },
-    ).exec();
-  }
-
-  public async addToFavorites(
-    offerId: string,
-    userId: string,
-  ): Promise<DocumentType<OfferEntity> | null> {
-    return this.OfferModel.findByIdAndUpdate(
-      offerId,
-      { $addToSet: { usersFavorite: userId } },
-      { new: true },
-    ).exec();
-  }
-
-  public async removeFromFavorites(
-    offerId: string,
-    userId: string,
-  ): Promise<DocumentType<OfferEntity> | null> {
-    return this.OfferModel.findByIdAndUpdate(
-      offerId,
-      { $pull: { usersFavorite: userId } },
       { new: true },
     ).exec();
   }
